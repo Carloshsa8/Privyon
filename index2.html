@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privyon — Retome o controle dos seus dados</title>
+  <meta name="description"
+    content="A Privyon ajuda pessoas a dependerem menos das big techs, protegendo sua privacidade digital com ferramentas simples, transparentes e poderosas." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav id="navbar">
+    <div class="inner">
+      <a href="#inicio" class="nav-logo">
+        <!-- Privyon Logo SVG -->
+        <svg class="logo-icon" viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+        </svg>
+        <span class="logo-text">Priv<span>yon</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html#inicio">Início</a></li>
+        <li><a href="index.html#solucoes" class="nav-link">Soluções</a></li>
+        <li><a href="produtos.html" class="nav-link">Produtos</a></li>
+        <li><a href="index.html#sobre" class="nav-link">Sobre</a></li>
+        <li><a href="#contato" class="nav-link">Contato</a></li>
+        <li><a href="javascript:void(0)" class="nav-link" id="manifesto-btn"
+            onclick="window.openManifesto()">Manifesto</a></li>
+        <li><a href="javascript:void(0)" class="btn-cta" id="header-cta" onclick="window.openContactHub()">Comece
+            Agora</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section id="inicio">
+    <!-- Background -->
+    <div class="hero-bg">
+      <img src="assets/hero-bg.jpg" alt="Digital privacy background" />
+      <div class="hero-bg-overlay"></div>
+    </div>
+
+    <!-- Grid pattern -->
+    <div class="grid-pattern"></div>
+
+    <!-- Scan line -->
+    <div class="scan-line"></div>
+
+    <!-- Content -->
+    <div class="hero-content">
+      <div class="hero-inner">
+        <!-- Badge -->
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Seus dados, suas regras
+        </div>
+
+        <!-- Heading -->
+        <h1 class="hero-h1">
+          Retome o <span class="text-gradient">controle</span><br>
+          dos seus dados
+        </h1>
+
+        <!-- Description -->
+        <p class="hero-desc">
+          A Privyon ajuda pessoas e empresas a dependerem menos das big techs,
+          protegendo sua privacidade digital com ferramentas simples,
+          transparentes e poderosas.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-btns">
+          <a href="javascript:void(0)" class="btn-primary" id="hero-cta" onclick="window.openContactHub()">
+            Proteja seus Dados
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+          <a href="#solucoes" class="btn-outline" target="_self">Nossas Soluções</a>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-value glow-text" data-target="1000" data-suffix="+">0</div>
+            <div class="stat-label">Pessoas Protegidas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value glow-text" data-target="0" data-suffix="%">0%</div>
+            <div class="stat-label">Dados Vendidos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value glow-text" data-target="100" data-suffix="%">0</div>
+            <div class="stat-label">Transparência</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de notícias como rodapé do Hero -->
+    <div class="marquee-section hero-footer-marquee">
+      <div class="marquee-track">
+        <span class="item">Privacidade Real <span class="sep">·</span></span>
+        <span class="item">Código Aberto <span class="sep">·</span></span>
+        <span class="item">0% Dados Vendidos <span class="sep">·</span></span>
+        <span class="item">Criptografia Total <span class="sep">·</span></span>
+        <span class="item">Sem Big Techs <span class="sep">·</span></span>
+        <span class="item">Suporte Humano <span class="sep">·</span></span>
+        <span class="item">Você no Controle <span class="sep">·</span></span>
+        <!-- Duplicata para o loop -->
+        <span class="item">Privacidade Real <span class="sep">·</span></span>
+        <span class="item">Código Aberto <span class="sep">·</span></span>
+        <span class="item">0% Dados Vendidos <span class="sep">·</span></span>
+        <span class="item">Criptografia Total <span class="sep">·</span></span>
+        <span class="item">Sem Big Techs <span class="sep">·</span></span>
+        <span class="item">Suporte Humano <span class="sep">·</span></span>
+        <span class="item">Você no Controle <span class="sep">·</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SERVICES ==================== -->
+  <section id="solucoes">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">// Soluções</span>
+        <h2 class="section-title">
+          Liberdade digital <span class="text-gradient">na prática</span>
+        </h2>
+        <p class="section-desc">
+          Ferramentas e serviços para você retomar o controle da sua vida
+          digital e depender menos das big techs.
+        </p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Card 1 -->
+        <div class="service-card reveal delay-1" data-service="big-techs" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19.69 14a6.9 6.9 0 0 0 .31-2V5l-8-3-3.16 1.18" />
+              <path d="M4.73 4.73 4 5v7a11.64 11.64 0 0 0 .49 1.51" />
+              <path d="M12 22s8-4 8-10V5" />
+              <line x1="2" y1="2" x2="22" y2="22" />
+            </svg>
+          </div>
+          <h3 class="service-title">Desvinculação de Big Techs</h3>
+          <p class="service-desc">Ajudamos você a migrar seus dados e serviços para alternativas que respeitam sua
+            privacidade, sem complicação.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="service-card reveal delay-2" data-service="email" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+          </div>
+          <h3 class="service-title">Email Privado</h3>
+          <p class="service-desc">Configure seu email com criptografia de ponta a ponta, livre de rastreamento e leitura
+            por terceiros.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="service-card reveal delay-3" data-service="nuvem" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+            </svg>
+          </div>
+          <div class="service-title">Nuvem Soberana</div>
+          <p class="service-desc">Armazene seus arquivos em serviços de nuvem que você controla, sem que ningueém acesse
+            sem sua permissão.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="service-card reveal delay-1" data-service="senhas" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z" />
+              <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+          <h3 class="service-title">Gestão de Senhas e Identidade</h3>
+          <p class="service-desc">Ferramentas seguras para gerenciar suas credenciais digitais e proteger sua identidade
+            online.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="service-card reveal delay-2" data-service="backup" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="22" y1="12" x2="2" y2="12" />
+              <path
+                d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+              <line x1="6" y1="16" x2="6.01" y2="16" />
+              <line x1="10" y1="16" x2="10.01" y2="16" />
+            </svg>
+          </div>
+          <h3 class="service-title">Backup Seguro</h3>
+          <p class="service-desc">Backups criptografados e automáticos dos seus dados importantes, sem depender de
+            grandes plataformas.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="service-card reveal delay-3" data-service="auditoria" role="button" tabindex="0">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <path d="M10 13a2 2 0 1 0 4 0 2 2 0 0 0-4 0" />
+              <line x1="14.5" y1="15.5" x2="16" y2="17" />
+            </svg>
+          </div>
+          <h3 class="service-title">Auditoria de Privacidade</h3>
+          <p class="service-desc">Análise completa da sua pegada digital para identificar onde seus dados estão expostos
+            e como corrigi-los.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section id="sobre">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Left column -->
+        <div class="reveal from-left">
+          <span class="section-tag">// Sobre nós</span>
+          <h2 class="section-title" style="margin-bottom: 1.5rem;">
+            Privacidade é um <span class="text-gradient">direito</span>, não um luxo
+          </h2>
+          <p style="font-size:1.125rem; line-height:1.7; color:var(--muted); margin-bottom:2rem;">
+            A Privyon nasceu da crença de que as pessoas merecem ter controle
+            real sobre seus dados. Não acreditamos que você precise entregar
+            sua vida digital em troca de conveniência. Existem alternativas
+            melhores — e estamos aqui para te mostrar o caminho.
+          </p>
+
+          <div class="about-features">
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Software livre e de código aberto sempre que possível</span>
+            </div>
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Sem venda ou compartilhamento dos seus dados</span>
+            </div>
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Criptografia de ponta a ponta em todas as soluções</span>
+            </div>
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Suporte humanizado e em português</span>
+            </div>
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Guias práticos para migração sem estresse</span>
+            </div>
+            <div class="feature-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Comunidade ativa de pessoas que valorizam privacidade</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column: stat cards -->
+        <div class="about-stats">
+          <div class="about-stat-card reveal delay-1">
+            <div class="about-stat-value glow-text" data-target="1000" data-suffix="+">0</div>
+            <div class="about-stat-label">Usuários Ativos</div>
+          </div>
+          <div class="about-stat-card reveal delay-2">
+            <div class="about-stat-value glow-text" data-target="30" data-suffix="+">0</div>
+            <div class="about-stat-label">Ferramentas Indicadas</div>
+          </div>
+          <div class="about-stat-card reveal delay-3">
+            <div class="about-stat-value glow-text" data-target="0" data-suffix="">0</div>
+            <div class="about-stat-label">Dados Vendidos</div>
+          </div>
+          <div class="about-stat-card reveal delay-4">
+            <div class="about-stat-value glow-text" data-target="100" data-suffix="%">0</div>
+            <div class="about-stat-label">Método Totalmente Transparente</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contato" class="contact-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">// Contato</span>
+        <h2 class="section-title">
+          Vamos <span class="text-gradient">conversar</span>
+        </h2>
+        <p class="section-desc" style="margin-inline:auto;">
+          Quer retomar o controle dos seus dados? Fale com a gente.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact info -->
+        <div class="contact-info reveal from-left">
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Email</div>
+              <div class="contact-info-value">contato@privyon.com.br</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.27 2 2 0 0 1 3.58 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Telefone</div>
+              <div class="contact-info-value">+55 (99) 99999-0000</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Localização</div>
+              <div class="contact-info-value">Hogwarts- Brasil</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact form -->
+        <form class="contact-form reveal from-right" id="contact-form">
+          <div class="form-row">
+            <input type="text" id="contact-name" class="form-input" placeholder="Nome" required />
+            <input type="email" id="contact-email" class="form-input" placeholder="Email" required />
+          </div>
+          <textarea id="contact-message" class="form-input form-textarea" rows="4"
+            placeholder="Como podemos te ajudar a proteger seus dados?" required></textarea>
+
+          <div class="form-success" id="form-success">
+            ✓ Mensagem enviada! Vamos entrar em contato em breve.
+          </div>
+          <button type="submit" class="btn-submit" id="btn-submit">
+            Enviar Mensagem
+            <svg viewBox="0 0 24 24">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DIGITAL FOOTPRINT SCANNER ==================== -->
+  <section id="data-scanner">
+    <div class="container">
+      <div class="scanner-wrap reveal from-bottom">
+        <div class="scanner-header">
+          <span class="bad-tag">AVISO DE EXPOSIÇÃO</span>
+          <h2 class="scanner-h2">Olha o que você mostra pras <span class="text-danger">Big Techs</span></h2>
+          <p class="scanner-p">Apenas por visitar esta página, seu navegador já revelou dados sensíveis que empresas
+            usam para te rastrear. Quer ver o que eles sabem?</p>
+          <button class="btn-danger" id="reveal-scanner">
+            <svg viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Revelar meus Rastros
+          </button>
+        </div>
+
+        <div class="scanner-results" id="scanner-results">
+          <div class="exposure-meter-wrap">
+            <div class="exposure-label">Nível de Vulnerabilidade: <span id="exposure-pct">0%</span></div>
+            <div class="exposure-bar">
+              <div class="exposure-fill" id="exposure-fill"></div>
+            </div>
+          </div>
+
+          <div class="scanner-groups">
+            <!-- GRUPO 1: IDENTIDADE -->
+            <div class="scanner-group">
+              <h3 class="group-title">IDENTIDADE E LOCALIZAÇÃO</h3>
+              <div class="scanner-grid">
+                <div class="data-card wide">
+                  <div class="data-icon">🌐</div>
+                  <div class="data-content">
+                    <label>Endereço IP (Público)</label>
+                    <div class="data-val" id="scan-ip">---.---.---.---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">📍</div>
+                  <div class="data-content">
+                    <label>Sua Localização</label>
+                    <div class="data-val" id="scan-location">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">🏢</div>
+                  <div class="data-content">
+                    <label>Provedor (ISP)</label>
+                    <div class="data-val" id="scan-isp">---</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GRUPO 2: HARDWARE -->
+            <div class="scanner-group">
+              <h3 class="group-title">HARDWARE E SISTEMA</h3>
+              <div class="scanner-grid">
+                <div class="data-card">
+                  <div class="data-icon">💻</div>
+                  <div class="data-content">
+                    <label>Sistema / Navegador</label>
+                    <div class="data-val" id="scan-browser">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">📐</div>
+                  <div class="data-content">
+                    <label>Resolução da Tela</label>
+                    <div class="data-val" id="scan-screen">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">⚡</div>
+                  <div class="data-content">
+                    <label>Status da Bateria</label>
+                    <div class="data-val" id="scan-battery">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">🧠</div>
+                  <div class="data-content">
+                    <label>Processador / RAM</label>
+                    <div class="data-val" id="scan-hardware">---</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GRUPO 3: CONEXÃO -->
+            <div class="scanner-group">
+              <h3 class="group-title">RASTROS DE CONEXÃO</h3>
+              <div class="scanner-grid">
+                <div class="data-card">
+                  <div class="data-icon">🕒</div>
+                  <div class="data-content">
+                    <label>Fuso Horário / Hora</label>
+                    <div class="data-val" id="scan-tz">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">📡</div>
+                  <div class="data-content">
+                    <label>Tipo de Conexão</label>
+                    <div class="data-val" id="scan-conn">---</div>
+                  </div>
+                </div>
+                <div class="data-card">
+                  <div class="data-icon">🖐️</div>
+                  <div class="data-content">
+                    <label>Interface Touch</label>
+                    <div class="data-val" id="scan-touch">---</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scanner-disclaimer">
+            <p><strong>Privacidade Total:</strong> Esses dados são coletados apenas no seu navegador. A Privyon
+              <strong>não salva</strong> e <strong>não transmite</strong> essas informações para nenhum servidor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <a href="#inicio" class="footer-logo">
+          <svg viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+          </svg>
+          <span class="footer-logo-text">Priv<span>yon</span></span>
+        </a>
+        <p class="footer-copy">© <span id="year"></span> Privyon. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL SERVIÇOS ==================== -->
+  <div id="service-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div class="modal-icon" id="modal-icon"></div>
+      <h3 class="modal-title" id="modal-title"></h3>
+      <p class="modal-desc" id="modal-desc"></p>
+      <ul class="modal-list" id="modal-list"></ul>
+      <a href="javascript:void(0)" class="modal-cta" id="modal-cta">Quero saber mais</a>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL MANIFESTO ==================== -->
+  <div id="manifesto-modal" class="manifesto-overlay" role="dialog" aria-modal="true">
+    <div class="manifesto-container">
+      <button class="manifesto-close" id="manifesto-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div class="manifesto-body">
+        <div class="manifesto-header">
+          <span class="section-tag">// Manifesto Privyon</span>
+          <h2 class="manifesto-title">Privacidade é Liberdade.<br><span class="text-gradient">Retome o seu
+              Controle.</span></h2>
+        </div>
+
+        <div class="manifesto-grid">
+          <div class="manifesto-text-cols">
+            <p class="lead">Vivemos em uma era onde nossa identidade digital foi transformada em mercadoria. As Big
+              Techs coletam silenciosamente cada clique para alimentar lucros sobre a sua atenção.</p>
+            <p>A <strong>Privyon</strong> nasceu de uma convicção simples: você deve ser o único dono do seu rastro
+              digital. Acreditamos na <span>Soberania Digital</span> — o poder de decidir onde seus dados residem.</p>
+            <p>Não se trata de esconder segredos, mas de preservar a liberdade de ser quem você é, sem a vigilância
+              constante de algoritmos.</p>
+          </div>
+
+          <div class="manifesto-sidebar">
+            <div class="m-card">
+              <h4>Independência Ética</h4>
+              <p>Se você não paga pelo produto, o produto é você. Nós quebramos esse ciclo oferecendo alternativas
+                seguras.</p>
+            </div>
+            <div class="m-card">
+              <h4>Transparência Radical</h4>
+              <p>Código aberto e processos claros. Se não podemos mostrar como funciona, não merece sua confiança.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="manifesto-footer">
+          <blockquote>"O objetivo não é apenas oferecer ferramentas, mas sim um caminho para uma vida digital mais
+            livre."</blockquote>
+          <button class="btn-cta" id="manifesto-contato-btn" onclick="window.openContactHub()">Agende uma Consultoria de
+            Privacidade</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONTACT HUB (CENTRAL) ==================== -->
+  <div id="contact-hub" class="hub-overlay" role="dialog" aria-modal="true">
+    <div class="hub-box">
+      <button class="hub-close" id="hub-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div class="hub-header">
+        <h2 class="hub-title">Vamos conversar?</h2>
+        <p class="hub-desc">Escolha o seu canal preferido para atendimento imediato.</p>
+      </div>
+
+      <div class="hub-options">
+        <a href="https://wa.me/5517997878350" target="_blank" class="hub-btn whatsapp">
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+              </path>
+            </svg>
+          </div>
+          <div class="hub-info">
+            <span class="hub-label">WhatsApp</span>
+            <span class="hub-val">(99) 99999-0000</span>
+          </div>
+        </a>
+
+        <a href="https://t.me/privyon_suporte" target="_blank" class="hub-btn telegram">
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </div>
+          <div class="hub-info">
+            <span class="hub-label">Telegram</span>
+            <span class="hub-val">@privyon_suporte</span>
+          </div>
+        </a>
+
+        <a href="mailto:contato@privyon.com.br" class="hub-btn email">
+          <div class="hub-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="hub-info">
+            <span class="hub-label">E-mail Corporativo</span>
+            <span class="hub-val">contato@privyon.com.br</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="hub-footer">
+        <p>Ou continue rolando para usar o formulário tradicional.</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="#inicio" class="back-to-top" id="back-to-top" aria-label="Voltar para o topo">
+    <svg viewBox="0 0 24 24">
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  </a>
+
+  <script src="main.js"></script>
+
+  <!-- Mobile menu move to body end for better isolation -->
+  <div id="mobile-menu">
+    <a href="#inicio" onclick="window.closeMobile()">Início</a>
+    <a href="index.html#solucoes" onclick="window.closeMobile()">Soluções</a>
+    <a href="produtos.html" onclick="window.closeMobile()">Produtos</a>
+    <a href="index.html#sobre" onclick="window.closeMobile()">Sobre</a>
+    <a href="#contato" onclick="window.closeMobile()">Contato</a>
+    <a href="javascript:void(0)" id="mobile-manifesto-btn" onclick="window.openManifesto()">Manifesto</a>
+    <a href="javascript:void(0)" id="mobile-header-cta" onclick="window.openContactHub()" class="btn-cta">Comece
+      Agora</a>
+  </div>
+</body>
+
+</html>

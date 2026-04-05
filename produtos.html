@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privyon — Produtos e Serviços</title>
+  <meta name="description"
+    content="Explore as ferramentas e serviços da Privyon para retomar o controle da sua privacidade digital." />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav id="navbar">
+    <div class="inner">
+      <a href="index.html#inicio" class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+        </svg>
+        <span class="logo-text">Priv<span>yon</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html#inicio">Início</a></li>
+        <li><a href="index.html#solucoes" class="nav-link">Soluções</a></li>
+        <li><a href="produtos.html" class="nav-link active">Produtos</a></li>
+        <li><a href="index.html#sobre" class="nav-link">Sobre</a></li>
+        <li><a href="index.html#contato" class="nav-link">Contato</a></li>
+        <li><a href="javascript:void(0)" class="nav-link" id="manifesto-btn" onclick="window.openManifesto()">Manifesto</a></li>
+        <li><a href="javascript:void(0)" class="btn-cta" id="header-cta" onclick="window.openContactHub()">Comece Agora</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    </div>
+  </nav>
+
+  <!-- ==================== PRODUCTS CONTENT ==================== -->
+  <section id="produtos-page" style="padding-top: 10rem; padding-bottom: 8rem;">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">// Base de Conhecimento</span>
+        <h2 class="section-title">
+          Produtos e <span class="text-gradient">Serviços</span>
+        </h2>
+        <p class="section-desc">
+          Explore nossa seleção categorizada de ferramentas e práticas recomendadas para garantir sua soberania digital.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Apps e Ferramentas -->
+        <div class="service-card reveal delay-1" data-service="prod-apps" role="button" tabindex="0" onclick="window.openModal('prod-apps')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Apps e Ferramentas</h3>
+          <p class="service-desc">Aplicações profissionais para produtividade e gestão de tarefas com foco em soberania digital.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Rede e Conectividade -->
+        <div class="service-card reveal delay-2" data-service="prod-rede" role="button" tabindex="0" onclick="window.openModal('prod-rede')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+              <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Rede e Conectividade</h3>
+          <p class="service-desc">Blindagem de conexão via DNS seguro, Wi-Fi com padrões militares e ofuscação de tráfego.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Segurança e Criptografia -->
+        <div class="service-card reveal delay-3" data-service="prod-seguranca" role="button" tabindex="0" onclick="window.openModal('prod-seguranca')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Segurança e Criptografia</h3>
+          <p class="service-desc">Ferramentas de proteção de arquivos, gerenciamento de vulnerabilidades e protocolos de segurança.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Cloud e Backup -->
+        <div class="service-card reveal delay-1" data-service="prod-backup" role="button" tabindex="0" onclick="window.openModal('prod-backup')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 13V3L9 6m3-3l3 3"/>
+              <path d="M17 13a5 5 0 1 1-10 0"/>
+              <line x1="2" y1="21" x2="22" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Cloud e Backup</h3>
+          <p class="service-desc">Soberania de dados com nuvens privadas, backups automáticos e estratégias de preservação.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Conceitos e Auditoria -->
+        <div class="service-card reveal delay-2" data-service="prod-auditoria" role="button" tabindex="0" onclick="window.openModal('prod-auditoria')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Conceitos e Auditoria</h3>
+          <p class="service-desc">Relatórios diagnósticos de vulnerabilidades e remoção sistemática de pegada digital pública.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Privacidade Familiar -->
+        <div class="service-card reveal delay-3" data-service="prod-familia" role="button" tabindex="0" onclick="window.openModal('prod-familia')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Privacidade Familiar</h3>
+          <p class="service-desc">Blindagem de dispositivos domésticos inteligentes e segurança digital integrada para dependentes.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Segurança para Negócios -->
+        <div class="service-card reveal delay-1" data-service="prod-negocio" role="button" tabindex="0" onclick="window.openModal('prod-negocio')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Segurança para Negócios</h3>
+          <p class="service-desc">Blindagem digital para pequenas empresas, autônomos e gestão de dados de clientes.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Anonimato Avançado -->
+        <div class="service-card reveal delay-2" data-service="prod-anonimato" role="button" tabindex="0" onclick="window.openModal('prod-anonimato')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Anonimato Avançado</h3>
+          <p class="service-desc">Sistemas portáteis e redes descentralizadas voltadas para o anonimato digital absoluto.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Mensageiros e Chat -->
+        <div class="service-card reveal delay-3" data-service="prod-mensageiros" role="button" tabindex="0" onclick="window.openModal('prod-mensageiros')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Mensageiros e Chat</h3>
+          <p class="service-desc">Infraestruturas de comunicação confidencial baseadas em criptografia forte de última geração.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+
+        <!-- Gestão de Senhas -->
+        <div class="service-card reveal delay-1" data-service="prod-senhas" role="button" tabindex="0" onclick="window.openModal('prod-senhas')">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.5-2.5"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Cofres e Gestão de Senhas</h3>
+          <p class="service-desc">Implementação de cofres de senhas com criptografia total e autenticação física.</p>
+          <svg class="service-arrow" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <a href="index.html#inicio" class="footer-logo">
+          <svg viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+            <path d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+          </svg>
+          <span class="footer-logo-text">Priv<span>yon</span></span>
+        </a>
+        <p class="footer-copy">© <span id="year"></span> Privyon. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modais (Injetados via main.js) -->
+
+  <!-- ==================== MANIFESTO MODAL ==================== -->
+  <div id="manifesto-modal" class="manifesto-overlay" role="dialog" aria-modal="true">
+    <div class="manifesto-container">
+      <button class="manifesto-close" id="manifesto-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      
+      <div class="manifesto-body">
+        <div class="manifesto-header">
+          <span class="section-tag">// Manifesto Privyon</span>
+          <h2 class="manifesto-title">Privacidade é Liberdade.<br><span class="text-gradient">Retome o seu Controle.</span></h2>
+        </div>
+
+        <div class="manifesto-grid">
+          <div class="manifesto-text-cols">
+            <p class="lead">Vivemos em uma era onde nossa identidade digital foi transformada em mercadoria. As Big Techs coletam silenciosamente cada clique para alimentar lucros sobre a sua atenção.</p>
+            <p>A <strong>Privyon</strong> nasceu de uma convicção simples: você deve ser o único dono do seu rastro digital. Acreditamos na <span>Soberania Digital</span> — o poder de decidir onde seus dados residem.</p>
+            <p>Não se trata de esconder segredos, mas de preservar a liberdade de ser quem você é, sem a vigilância constante de algoritmos.</p>
+          </div>
+          
+          <div class="manifesto-sidebar">
+            <div class="m-card">
+              <h4>Independência Ética</h4>
+              <p>Se você não paga pelo produto, o produto é você. Nós quebramos esse ciclo oferecendo alternativas seguras.</p>
+            </div>
+            <div class="m-card">
+              <h4>Transparência Radical</h4>
+              <p>Código aberto e processos claros. Se não podemos mostrar como funciona, não merece sua confiança.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="manifesto-footer">
+          <blockquote>"O objetivo não é apenas oferecer ferramentas, mas sim um caminho para uma vida digital mais livre."</blockquote>
+          <button class="btn-cta" id="manifesto-contato-btn" onclick="window.openContactHub()">Agende uma Consultoria de Privacidade</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hub de Contato injetado via main.js -->
+
+  <a href="index.html#inicio" class="back-to-top" id="back-to-top" aria-label="Voltar para o topo">
+    <svg viewBox="0 0 24 24">
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  </a>
+
+  <script src="main.js"></script>
+  
+  <!-- Mobile menu move to body end for better isolation -->
+  <div id="mobile-menu">
+    <a href="index.html#inicio" onclick="window.closeMobile()">Início</a>
+    <a href="index.html#solucoes" onclick="window.closeMobile()">Soluções</a>
+    <a href="produtos.html" class="active" onclick="window.closeMobile()">Produtos</a>
+    <a href="index.html#sobre" onclick="window.closeMobile()">Sobre</a>
+    <a href="index.html#contato" onclick="window.closeMobile()">Contato</a>
+    <a href="javascript:void(0)" id="mobile-manifesto-btn" onclick="window.openManifesto()">Manifesto</a>
+    <a href="javascript:void(0)" id="mobile-header-cta" onclick="window.openContactHub()" class="btn-cta">Comece Agora</a>
+  </div>
+</body>
+</html>

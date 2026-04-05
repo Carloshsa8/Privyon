@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Garantindo que o visual original seja preservado */
+        /* Hero H1 responsivo - usa clamp mobile-friendly */
         .hero-content h1 {
-            font-size: clamp(4rem, 15vw, 12rem);
+            font-size: clamp(2.8rem, 8vw, 8rem);
             line-height: 0.9;
         }
         .hero-content p {
@@ -63,9 +63,40 @@
         .admin-fab:hover::after {
             opacity: 1;
         }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: clamp(2.4rem, 9vw, 3.5rem) !important;
+                line-height: 1 !important;
+            }
+            .hero-content p {
+                font-size: 0.95rem !important;
+                padding: 0 1rem;
+            }
+            .admin-fab {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 56px;
+                height: 56px;
+                font-size: 1.2rem;
+            }
+            .admin-fab::after { display: none; }
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#home" onclick="closeMobileNav()">Home</a>
+        <a href="#infra" onclick="closeMobileNav()">Infraestrutura</a>
+        <a href="#lazer" onclick="closeMobileNav()">Lazer</a>
+        <a href="#vibe" onclick="closeMobileNav()">Estilo de Vida</a>
+        <a href="agenda.html">Confraria</a>
+        <a href="gallery.html">Galeria</a>
+        <a href="#contact" onclick="closeMobileNav()">Contato</a>
+        <a href="login.html" class="mobile-cta">Área do Morador</a>
+    </div>
+
     <header id="main-header">
         <nav class="nav-container">
             <a href="index.html" class="logo">VD|III</a>
@@ -81,6 +112,10 @@
             <div id="userNav">
                 <a href="login.html" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.7rem;">Área do Morador</a>
             </div>
+            <!-- Hamburger Mobile -->
+            <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileNav()">
+                <span></span><span></span><span></span>
+            </button>
         </nav>
     </header>
 
@@ -177,15 +212,15 @@
             </div>
         </section>
 
-        <section id="contact" class="contact-section" style="padding: 10rem 4rem;">
+        <section id="contact" class="contact-section">
             <div class="container reveal">
-                <div class="contact-box" style="padding: 6rem; border: 1px solid var(--glass-border); background: var(--bg-secondary);">
+                <div class="contact-box">
                     <div class="contact-header" style="margin-bottom: 4rem;">
                         <span style="color: var(--accent); letter-spacing: 0.2rem; font-size: 0.8rem;">CONTATO</span>
-                        <h2 style="font-size: 3rem; margin-top: 1rem;">ESTAMOS À DISPOSIÇÃO</h2>
+                        <h2 class="contact-h2">ESTAMOS À DISPOSIÇÃO</h2>
                     </div>
                     <form class="contact-form" id="contact-form" style="display: grid; gap: 2rem;">
-                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div class="form-row">
                             <input type="text" placeholder="Seu Nome" required style="background: transparent; border: none; border-bottom: 1px solid var(--glass-border); padding: 1rem 0; color: #fff;">
                             <input type="email" placeholder="E-mail" required style="background: transparent; border: none; border-bottom: 1px solid var(--glass-border); padding: 1rem 0; color: #fff;">
                         </div>
@@ -203,6 +238,26 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="main.js"></script>
     <script>
+        // Mobile Nav
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            btn.classList.toggle('open');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        }
+        function closeMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.remove('open');
+            btn.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        // Fechar ao clicar fora
+        document.getElementById('mobileNav').addEventListener('click', function(e) {
+            if (e.target === this) closeMobileNav();
+        });
+
         // Session Management Global
         const currentUser = JSON.parse(localStorage.getItem('damha_currentUser'));
         const userNav = document.getElementById('userNav');

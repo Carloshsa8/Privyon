@@ -103,6 +103,90 @@ header.scrolled {
   color: var(--accent);
 }
 
+/* === HAMBURGER MENU === */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1100;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: all 0.4s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(5, 16, 12, 0.98);
+  backdrop-filter: blur(20px);
+  z-index: 1050;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.mobile-nav.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.mobile-nav a {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.mobile-nav a:hover {
+  color: var(--accent);
+}
+
+.mobile-nav .mobile-cta {
+  margin-top: 1rem;
+  padding: 1rem 3rem;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 /* Buttons */
 .btn {
   display: inline-block;
@@ -481,51 +565,124 @@ textarea {
 }
 
 
-/* Responsive Optimizations */
+/* ============================================
+   RESPONSIVE — MOBILE FIRST
+   ============================================ */
+
 @media (max-width: 1200px) {
   .container { padding: 0 5%; }
-  .header-container { padding: 0 5%; }
-  .hero h1 { font-size: clamp(3rem, 8vw, 5.5rem); }
+  .header-container, .nav-container { padding: 0 5%; }
   .stats { gap: 3rem; }
 }
 
+/* === TABLET (max 992px) === */
 @media (max-width: 992px) {
-  .header-container, .nav-container { padding: 0 2rem; justify-content: center; }
-  header nav { display: none; }
-  .nav-links { display: none; }
-  .grid, .vibe-box, .floor-plan-box, .calc-container { grid-template-columns: 1fr; }
+  .header-container, .nav-container {
+    padding: 0 2rem;
+    justify-content: space-between;
+  }
+  .nav-links { display: none !important; }
+  .hamburger { display: flex; }
+  .logo { margin: 0; text-align: left; }
+
+  .vibe-box { grid-template-columns: 1fr; }
   .vibe-info, .plan-info { padding: 3rem 2rem; }
-  .contact-box { padding: 4rem 1.5rem; }
-  .form-row { grid-template-columns: 1fr; }
-  .infra-section h2, .vibe-info h2, .contact-header h2, .section-title, .park-section h2 { font-size: 3rem; }
+  .vibe-image { min-height: 300px; }
+
+  .form-row { grid-template-columns: 1fr !important; }
+  .contact-box { padding: 4rem 2rem !important; }
+
   .stats { gap: 2rem; flex-wrap: wrap; justify-content: center; text-align: center; }
-  .hero-btns { flex-direction: column; }
-  .calc-container { grid-template-columns: 1fr; gap: 2rem; }
-  .amenity-grid, .services-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .infra-section, .amenities-section, .vibe-section, .contact-section, .park-section, .floor-plan-section, .section-padding { padding: 6rem 0; }
-  .logo { margin: 0 auto; text-align: center; }
+  .amenity-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+  .infra-section, .amenities-section, .vibe-section, .contact-section { padding: 6rem 0; }
 }
 
+/* === MOBILE (max 768px) === */
 @media (max-width: 768px) {
-  .hero { padding-top: 80px; }
-  .hero h1, .hero-h1 { font-size: clamp(2.5rem, 8vw, 4rem); }
-  .hero-desc, .hero p { font-size: 1.1rem; }
-  .vibe-info h2, .contact-header h2, .plan-info h2, .section-header h2 { font-size: 2.5rem; }
-  .contact-box { padding: 3rem 1rem; }
-  .amenity-card, .service-card { padding: 2rem 1.5rem; }
+  .hero {
+    padding-top: 70px;
+    align-items: flex-end;
+    padding-bottom: 6rem;
+    text-align: center;
+  }
+
+  /* Sobrescreve o clamp gigante do inline style */
+  .hero-content h1,
+  .hero h1 {
+    font-size: clamp(2.8rem, 10vw, 4rem) !important;
+    line-height: 1 !important;
+  }
+
+  .hero-content p {
+    font-size: 1rem !important;
+    margin: 1.5rem auto !important;
+  }
+
+  /* Botões hero ficam em coluna */
+  .hero-content > div[style*="margin-top"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+  .hero-content .btn {
+    margin-left: 0 !important;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Location badge some no mobile */
+  .hero-location { display: none; }
+
+  .section-header h2 { font-size: 2rem; }
+  .vibe-info h2 { font-size: 2rem; }
+
+  /* Seção infra centralizada em mobile */
   .infra-section { padding: 5rem 0; }
-  .contact-form { padding: 0 1rem; }
-  .hero-location { right: 2rem; bottom: 2rem; }
+  .infra-section h2 { font-size: clamp(1.8rem, 6vw, 2.5rem) !important; }
+
+  /* Contato */
+  .contact-section { padding: 5rem 0 !important; }
+  .contact-box {
+    padding: 3rem 1.5rem !important;
+  }
+  .contact-header h2 { font-size: 2rem !important; }
+
+  .amenity-card { padding: 2.5rem 2rem; }
+  .amenity-grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 
+/* === SMALL MOBILE (max 480px) === */
 @media (max-width: 480px) {
-  .hero h1, .hero-h1 { font-size: 2.5rem; }
+  .header-container, .nav-container { padding: 0 1.2rem; }
+
+  .hero-content h1, .hero h1 {
+    font-size: clamp(2.2rem, 9vw, 3rem) !important;
+  }
+
   .stat-item .val { font-size: 2.5rem; }
-  .btn { width: 100%; text-align: center; display: block; margin-bottom: 1rem; }
-  .vibe-info { padding: 2rem 1rem; }
-  .infra-section h2, .vibe-info h2, .contact-header h2 { font-size: 2rem; }
-  .amenity-card, .service-card { padding: 1.5rem 1rem; }
-  .hero .hero-content { padding: 0 1rem; }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .vibe-info { padding: 2rem 1.2rem; }
+  .vibe-info h2 { font-size: 1.8rem; }
+
+  .infra-section h2 { font-size: 1.8rem !important; }
+  .contact-header h2 { font-size: 1.8rem !important; }
+
+  .amenity-card { padding: 2rem 1.2rem; }
+  .amenity-card h3 { font-size: 1.1rem; }
+
+  .contact-box { padding: 2.5rem 1rem !important; }
+
+  .section-header h2 { font-size: 1.8rem; }
+  .section-header { margin-bottom: 3rem; }
 }
 
 
@@ -594,3 +751,33 @@ textarea {
 .nav-links li a {
   white-space: nowrap !important;
 }
+
+/* ====== Contact Box (sem inline styles) ====== */
+.contact-box {
+  padding: 6rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+}
+
+.contact-h2 {
+  font-size: 3rem;
+  margin-top: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 0;
+}
+
+/* ====== Mobile: ocultar userNav e botão de login no header ====== */
+@media (max-width: 992px) {
+  #userNav {
+    display: none !important;
+  }
+  .hamburger {
+    display: flex;
+  }
+}
+

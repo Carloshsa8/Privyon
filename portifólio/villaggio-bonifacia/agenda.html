@@ -143,9 +143,16 @@
         @media (max-width: 900px) {
             .modal-grid { grid-template-columns: 1fr; }
             .modal-content { padding: 2rem; }
-            .truck-grid { padding: 0 2rem 4rem; }
+            .truck-grid { padding: 0 1.5rem 4rem; }
             .week-selector { flex-direction: column; gap: 1rem; }
             .week-btn { min-width: 100%; }
+        }
+        @media (max-width: 768px) {
+            .agenda-hero { padding: 8rem 1.5rem 4rem; }
+            .agenda-hero h1 { font-size: clamp(2.5rem, 10vw, 4rem) !important; }
+            .truck-grid { grid-template-columns: 1fr; padding: 0 1.5rem 4rem; }
+            .admin-fab { bottom: 1.5rem; right: 1.5rem; width: 56px; height: 56px; font-size: 1.5rem; }
+            .admin-fab::after { display: none; }
         }
         
         /* Floating Action Button for Admin */
@@ -194,6 +201,14 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html">Início</a>
+        <a href="agenda.html">Confraria</a>
+        <a href="gallery.html">Galeria</a>
+        <a href="login.html" class="mobile-cta">Área do Morador</a>
+    </div>
+
     <header id="main-header">
         <nav class="nav-container">
             <a href="index.html" class="logo">VD|III</a>
@@ -205,6 +220,9 @@
             <div id="userNav">
                 <a href="login.html" class="btn btn-outline" id="loginBtn" style="padding: 0.8rem 1.5rem; font-size: 0.7rem;">Área do Morador</a>
             </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMobileNav()">
+                <span></span><span></span><span></span>
+            </button>
         </nav>
     </header>
 
@@ -250,6 +268,26 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script>
+        // Mobile Nav
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            btn.classList.toggle('open');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        }
+        function closeMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.remove('open');
+            btn.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('mobileNav').addEventListener('click', function(e) {
+            if (e.target === this) closeMobileNav();
+        });
+    </script>
 
     <script>
         const isConfigured = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey !== "SUA_API_KEY" && firebaseConfig.apiKey.length > 20;

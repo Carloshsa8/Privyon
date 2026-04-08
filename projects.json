@@ -5,14 +5,14 @@
     "description": "Academia Setfit - identidade preta e amarela."
   },
   {
-    "title": "SetFit Academia (V2)",
-    "folder": "academia 2",
-    "description": "Projeto adicionado à pasta academia 2."
+    "title": "Academia Essencial",
+    "folder": "academia-essencial",
+    "description": "Projeto adicionado à pasta academia-essencial."
   },
   {
-    "title": "SetFit Academia (V1)",
-    "folder": "academia 1",
-    "description": "Projeto adicionado à pasta academia 1."
+    "title": "Academia Completo",
+    "folder": "academia-completo",
+    "description": "Projeto adicionado à pasta academia-completo."
   },
   {
     "title": "VILLAGGIO DI BONIFÁCIA",
@@ -20,9 +20,9 @@
     "description": "Projeto adicionado à pasta VILLAGGIO DI BONIFÁCIA."
   },
   {
-    "title": "Village 3",
-    "folder": "village 3",
-    "description": "Projeto adicionado à pasta village 3."
+    "title": "Modelo Condomínio Horizontal",
+    "folder": "modelo-condominio-horizontal",
+    "description": "Projeto adicionado à pasta modelo-condominio-horizontal."
   },
   {
     "title": "Alexandria",
@@ -30,8 +30,8 @@
     "description": "Plataforma de cursos online."
   },
   {
-    "title": "Villaggio Bonifacia",
-    "folder": "villaggio-bonifacia",
-    "description": "Projeto adicionado à pasta villaggio-bonifacia."
+    "title": "Village 3",
+    "folder": "village-3",
+    "description": "Projeto adicionado à pasta village-3."
   }
 ]

@@ -60,8 +60,8 @@
         </main>
     </div>
 
-    <div class="modal" id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
-        <div class="modal-content" style="background:#121212; width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gold); max-height:90vh; overflow-y:auto; margin:auto; position:relative;">
+    <div class="modal" id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:flex-end;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); max-height:100vh; overflow-y:auto; margin:0; box-sizing:border-box;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                 <h2 style="color:var(--gold);">Criar Novo Curso</h2>
                 <button onclick="document.getElementById('courseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -105,8 +105,8 @@
     </div>
 
     <!-- Edit Course Modal -->
-    <div class="modal" id="editCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
-        <div class="modal-content" style="background:#121212; width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gold); max-height:90vh; overflow-y:auto; margin:auto; position:relative;">
+    <div class="modal" id="editCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:flex-end;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); max-height:100vh; overflow-y:auto; margin:0; box-sizing:border-box;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                 <h2 style="color:var(--gold);">Editar Curso</h2>
                 <button onclick="document.getElementById('editCourseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -176,6 +176,8 @@
                         <td><span class="badge ${c.published?'badge-success':'badge-warning'}">${c.published?'Publicado':'Rascunho'}</span></td>
                         <td class="actions-cell">
                             <button class="action-btn" onclick="openEditCourse(${c.id})">Editar</button>
+                            <button class="action-btn" onclick="toggleCoursePublished(${c.id})">${c.published?'Desativar':'Ativar'}</button>
+                            <button class="action-btn action-btn-danger" onclick="deleteCourse(${c.id})">Deletar</button>
                             <a href="aulas.html?courseId=${c.id}" class="action-btn" style="text-decoration:none;">Gerenciar</a>
                             <a href="../curso-detalhe.html?id=${c.id}" class="action-btn" style="text-decoration:none;">Ver Página</a>
                         </td>
@@ -252,6 +254,20 @@
 
                 document.getElementById('editCourseModal').classList.remove('open');
                 renderMyCourses();
+            };
+
+            window.toggleCoursePublished = function(id) {
+                const course = getCourseById(id);
+                if (!course) return;
+                DB.updateCourse(id, { published: !course.published });
+                renderMyCourses();
+            };
+
+            window.deleteCourse = function(id) {
+                if (confirm('Tem certeza que deseja DELETAR este curso? Esta ação n\u00e3o pode ser desfeita.')) {
+                    DB.deleteCourse(id);
+                    renderMyCourses();
+                }
             };
         }
     </script>

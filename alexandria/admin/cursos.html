@@ -69,8 +69,8 @@
         </main>
     </div>
 
-    <div class="modal" id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
-        <div class="modal-content" style="background:#121212; width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gold); max-height:90vh; overflow-y:auto; margin:auto; position:relative;">
+    <div class="modal-overlay" id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                 <h2 style="color:var(--gold);">Criar Novo Curso</h2>
                 <button onclick="document.getElementById('courseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -123,8 +123,8 @@
     </div>
 
     <!-- Edit Course Modal -->
-    <div class="modal" id="editCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
-        <div class="modal-content" style="background:#121212; width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gold); max-height:90vh; overflow-y:auto; margin:auto; position:relative;">
+    <div class="modal-overlay" id="editCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                 <h2 style="color:var(--gold);">Editar Curso</h2>
                 <button onclick="document.getElementById('editCourseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
@@ -175,7 +175,7 @@
             </form>
         </div>
     </div>
-    <style> .modal.open { display: flex !important; } </style>
+    <style> .modal-overlay.open { display: flex !important; } </style>
 
     <script src="../courses.js"></script>
     <script src="../data.js"></script>

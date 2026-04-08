@@ -72,22 +72,35 @@
                 <p class="dash-page-desc">Visão geral da plataforma</p>
             </div>
 
-            <div class="stats-grid" id="statsGrid"></div>
-
-            <div class="chart-card">
-                <h3 class="chart-title">Receita Mensal</h3>
-                <div class="chart-bars" id="chartBars"></div>
+            <div class="filter-bar" id="filterBar">
+                <label class="filter-label">Filtrar por:</label>
+                <select class="filter-select" id="filterSelect" onchange="renderFilterData()">
+                    <option value="overview">Visão Geral</option>
+                    <option value="professor-revenue">Professores - Vendas</option>
+                    <option value="professor-courses">Professores - Cursos/Aulas</option>
+                </select>
             </div>
 
-            <div class="chart-card">
-                <h3 class="chart-title">Vendas Recentes</h3>
-                <div class="data-table-wrapper">
-                    <table class="data-table">
-                        <thead><tr><th>Data</th><th>Aluno</th><th>Curso</th><th>Valor</th><th>Status</th></tr></thead>
-                        <tbody id="recentSalesBody"></tbody>
-                    </table>
+            <div id="overviewContent">
+                <div class="stats-grid" id="statsGrid"></div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">Receita Mensal</h3>
+                    <div class="chart-bars" id="chartBars"></div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">Vendas Recentes</h3>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>Data</th><th>Aluno</th><th>Curso</th><th>Valor</th><th>Status</th></tr></thead>
+                            <tbody id="recentSalesBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+            <div id="filterContent" style="display:none;"></div>
         </main>
     </div>
 
@@ -133,10 +146,61 @@
                     <td>${new Date(s.date).toLocaleDateString('pt-BR')}</td>
                     <td>${u?u.name:'—'}</td>
                     <td>${c?c.shortName:'—'}</td>
-                    <td style="color:var(--gold)">${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(s.price)}</td>
+                    <td style="color:var(--accent)">${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(s.price)}</td>
                     <td><span class="badge ${statusMap[s.status]}">${statusLabel[s.status]}</span></td>
                 </tr>`;
             }).join('');
+
+            window.renderFilterData = function() {
+                const filter = document.getElementById('filterSelect').value;
+                const content = document.getElementById('filterContent');
+                const overview = document.getElementById('overviewContent');
+                
+                if (filter === 'overview') {
+                    overview.style.display = 'block';
+                    content.style.display = 'none';
+                    return;
+                }
+                
+                overview.style.display = 'none';
+                content.style.display = 'block';
+                
+                if (filter === 'professor-revenue') {
+                    const profData = DB.getProfessorSales();
+                    content.innerHTML = `
+                        <div class="chart-card">
+                            <h3 class="chart-title">Professores por Vendas</h3>
+                            <div class="data-table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Professor</th><th>Vendas</th><th>Receita</th></tr></thead>
+                                    <tbody>${profData.map(p => `<tr>
+                                        <td>${p.professor.name}</td>
+                                        <td>${p.totalSales}</td>
+                                        <td style="color:var(--accent)">${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(p.totalRevenue)}</td>
+                                    </tr>`).join('')}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                } else if (filter === 'professor-courses') {
+                    const profData = DB.getProfessorSales();
+                    content.innerHTML = `
+                        <div class="chart-card">
+                            <h3 class="chart-title">Professores - Cursos e Aulas</h3>
+                            <div class="data-table-wrapper">
+                                <table class="data-table">
+                                    <thead><tr><th>Professor</th><th>Cursos</th><th>Aulas</th></tr></thead>
+                                    <tbody>${profData.map(p => `<tr>
+                                        <td>${p.professor.name}</td>
+                                        <td>${p.totalCourses}</td>
+                                        <td>${p.totalLessons}</td>
+                                    </tr>`).join('')}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                }
+            };
         }
     </script>
 </body>

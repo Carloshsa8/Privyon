@@ -876,6 +876,15 @@ select.form-input { appearance: none; cursor: pointer; }
     margin-bottom: 2rem;
 }
 .chart-title { font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+
+/* Filter Bar */
+.filter-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; background: var(--card); border: 1px solid var(--border); padding: 1rem; }
+.filter-label { font-size: 0.875rem; color: var(--text-muted); }
+.filter-select {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 0.5rem 1rem; font-size: 0.875rem; cursor: pointer;
+}
+.filter-select:focus { outline: none; border-color: var(--gold); }
 .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 200px; padding-top: 1rem; }
 .chart-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
 .chart-bar {

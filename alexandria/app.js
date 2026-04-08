@@ -1,3 +1,4 @@
+
 /* =========================================
    Alexandria — Main App Logic
    ========================================= */
@@ -22,14 +23,18 @@ function updateCartCount() {
     document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
 }
 
-function addToCart(courseId) {
+function addToCart(courseId, selectedPrice = null) {
     const course = getCourseById(courseId);
     if (!course) return;
+    
+    const finalPrice = selectedPrice !== null ? selectedPrice : course.minPrice;
+    
     const existing = cart.find(item => item.id === courseId);
     if (existing) {
         existing.qty++;
+        existing.price = finalPrice; // update with latest chosen price
     } else {
-        cart.push({ id: course.id, name: course.name, shortName: course.shortName, price: course.price, image: course.image, qty: 1 });
+        cart.push({ id: course.id, name: course.name, shortName: course.shortName, price: finalPrice, image: course.image, qty: 1 });
     }
     saveCart();
     renderCart();
@@ -155,12 +160,12 @@ function renderCourseCard(course) {
                 </div>
                 <div class="course-footer">
                     <div>
-                        ${course.originalPrice ? `<span class="course-price-original">${formatPrice(course.originalPrice)}</span>` : ''}
-                        <span class="course-price">${formatPrice(course.price)}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-dim);">A partir de</span>
+                        <div class="course-price">${formatPrice(course.minPrice)}</div>
                     </div>
                     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                         <button class="course-btn" onclick="viewCourse(${course.id})" style="flex:1;">Ver Mais</button>
-                        <button class="course-btn" onclick="addToCart(${course.id})" style="background:var(--gold);color:var(--darker);flex:1;">Comprar</button>
+                        <button class="course-btn" onclick="viewCourse(${course.id})" style="background:var(--gold);color:var(--darker);flex:1;">Escolher Valor</button>
                     </div>
                 </div>
             </div>
@@ -197,7 +202,7 @@ function handleCheckout(e) {
 
     const methodElem = document.querySelector('.role-option.active');
     const paymentMethod = methodElem ? methodElem.dataset.method : 'cartao';
-    
+
     // Simulate generic loading timeout and open payment modal if Pix or Boleto
     if (paymentMethod === 'pix') {
         showPixModal();
@@ -206,7 +211,7 @@ function handleCheckout(e) {
     } else {
         processOrder(paymentMethod);
     }
-    
+
     return false;
 }
 
@@ -222,7 +227,7 @@ function processOrder(paymentMethod) {
     alert('Pedido realizado com sucesso! Você receberá o acesso por email.');
     cart = [];
     saveCart();
-    
+
     const overlay = document.getElementById('paymentModalOverlay');
     if (overlay) overlay.remove();
 
@@ -232,8 +237,8 @@ function processOrder(paymentMethod) {
 
 function showPixModal() {
     const total = cart.reduce((sum, item) => sum + item.price, 0);
-    const pixCode = "00020126420014br.gov.bcb.pix0120exemplo@alexandria.com520400005303986540" + total.toFixed(2).replace('.','') + "5802BR5920Alexandria Cursos6009Sao Paulo62070503***6304E2";
-    
+    const pixCode = "00020126420014br.gov.bcb.pix0120exemplo@alexandria.com520400005303986540" + total.toFixed(2).replace('.', '') + "5802BR5920Alexandria Cursos6009Sao Paulo62070503***6304E2";
+
     const modalHTML = `
         <div class="modal-overlay open" id="paymentModalOverlay" style="z-index:9999;">
             <div class="modal" style="max-width: 400px; text-align: center;">
@@ -275,7 +280,7 @@ function showBoletoModal() {
                     
                     <p style="font-size:0.9rem; color:var(--text-dim); margin-bottom: 0.5rem;">Código de barras:</p>
                     <div style="background:var(--darker); padding:1rem; border:1px dashed var(--border); font-family:monospace; margin-bottom:2rem; word-break:break-all;">
-                        34191.09008 10799.489181 21462.930000 6 863700000${cart.reduce((sum, item) => sum + item.price, 0).toFixed(2).replace('.','')}
+                        34191.09008 10799.489181 21462.930000 6 863700000${cart.reduce((sum, item) => sum + item.price, 0).toFixed(2).replace('.', '')}
                     </div>
                     <div style="display:flex;gap:1rem;">
                         <button class="btn" style="flex:1;" onclick="alert('Fazendo download do PDF...')">Baixar Boleto</button>

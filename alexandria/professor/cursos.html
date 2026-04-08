@@ -43,9 +43,12 @@
         </aside>
 
         <main class="dash-content">
-            <div class="dash-content-header">
-                <h1 class="dash-page-title">Meus Cursos</h1>
-                <p class="dash-page-desc">Gerencie seus cursos publicados</p>
+            <div class="dash-content-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="dash-page-title">Meus Cursos</h1>
+                    <p class="dash-page-desc">Gerencie seus cursos publicados</p>
+                </div>
+                <button class="btn btn-primary" onclick="document.getElementById('courseModal').classList.add('open')">Novo Curso</button>
             </div>
 
             <div class="data-table-wrapper">
@@ -57,6 +60,47 @@
         </main>
     </div>
 
+    <div class="modal" id="courseModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+        <div class="modal-content" style="background:var(--dark); width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gray); max-height: 90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold);">Criar Novo Curso</h2>
+                <button onclick="document.getElementById('courseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="courseForm" onsubmit="handleCreateCourse(event)">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Título do Curso</label>
+                    <input type="text" id="cTitle" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Categoria</label>
+                        <input type="text" id="cCat" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Imagem (nome ícone)</label>
+                        <input type="text" id="cImg" value="notion" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Descrição</label>
+                    <textarea id="cDesc" required rows="3" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px; max-width: 100%"></textarea>
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Preço Mínimo (R$)</label>
+                        <input type="number" id="cMinPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Preço Máximo (R$)</label>
+                        <input type="number" id="cMaxPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Curso e Publicar</button>
+            </form>
+        </div>
+    </div>
+    <style> .modal.open { display: flex !important; } </style>
+
     <script src="../courses.js"></script>
     <script src="../data.js"></script>
     <script src="../auth.js"></script>
@@ -66,25 +110,61 @@
             const user = Auth.getCurrentUser();
             document.getElementById('profName').textContent = user.name;
 
-            const myCourses = getCoursesByInstructor(user.id);
-            document.getElementById('profCoursesBody').innerHTML = myCourses.map(c => {
-                const enrolled = DB.getEnrollmentsByCourse(c.id).length;
-                const rating = DB.getCourseRating(c.id);
-                const totalLessons = c.modules.reduce((s,m)=>s+m.lessons.length,0);
-                return `<tr>
-                    <td style="color:var(--text)">${c.name}</td>
-                    <td><span class="badge badge-info">${c.category}</span></td>
-                    <td style="color:var(--gold)">${formatPrice(c.price)}</td>
-                    <td>${c.students + enrolled}</td>
-                    <td style="color:var(--gold)">★ ${rating.avg || c.rating}</td>
-                    <td>${c.modules.length} módulos · ${totalLessons} aulas</td>
-                    <td><span class="badge ${c.published?'badge-success':'badge-warning'}">${c.published?'Publicado':'Rascunho'}</span></td>
-                    <td class="actions-cell">
-                        <a href="aulas.html?courseId=${c.id}" class="action-btn" style="text-decoration:none;">Gerenciar</a>
-                        <a href="../curso-detalhe.html?id=${c.id}" class="action-btn" style="text-decoration:none;">Ver Página</a>
-                    </td>
-                </tr>`;
-            }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:2rem;">Nenhum curso encontrado</td></tr>';
+            const renderMyCourses = () => {
+                const myCourses = getCoursesByInstructor(user.id);
+                document.getElementById('profCoursesBody').innerHTML = myCourses.map(c => {
+                    const enrolled = DB.getEnrollmentsByCourse(c.id).length;
+                    const rating = DB.getCourseRating(c.id);
+                    const totalLessons = c.modules ? c.modules.reduce((s,m)=>s+m.lessons.length,0) : 0;
+                    return `<tr>
+                        <td style="color:var(--text)">${c.name}</td>
+                        <td><span class="badge badge-info">${c.category}</span></td>
+                        <td style="color:var(--gold); white-space: nowrap;">${formatPrice(c.minPrice || c.price)} - ${formatPrice(c.maxPrice || c.price)}</td>
+                        <td>${(c.students || 0) + enrolled}</td>
+                        <td style="color:var(--gold)">★ ${rating.avg || c.rating || 0}</td>
+                        <td>${c.modules ? c.modules.length : 0} módulos · ${totalLessons} aulas</td>
+                        <td><span class="badge ${c.published?'badge-success':'badge-warning'}">${c.published?'Publicado':'Rascunho'}</span></td>
+                        <td class="actions-cell">
+                            <a href="aulas.html?courseId=${c.id}" class="action-btn" style="text-decoration:none;">Gerenciar</a>
+                            <a href="../curso-detalhe.html?id=${c.id}" class="action-btn" style="text-decoration:none;">Ver Página</a>
+                        </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:2rem;">Nenhum curso encontrado</td></tr>';
+            };
+            
+            renderMyCourses();
+            
+            window.handleCreateCourse = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('cTitle').value;
+                const cat = document.getElementById('cCat').value;
+                const desc = document.getElementById('cDesc').value;
+                const minPrice = parseFloat(document.getElementById('cMinPrice').value);
+                const maxPrice = parseFloat(document.getElementById('cMaxPrice').value);
+                const img = document.getElementById('cImg').value;
+                
+                DB.addCourse({
+                    name: title,
+                    shortName: title.split(':')[0] || title,
+                    category: cat,
+                    description: desc,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    price: minPrice,
+                    image: img,
+                    instructorId: user.id,
+                    level: "Iniciante",
+                    duration: "0h",
+                    students: 0,
+                    rating: 5.0,
+                    published: true,
+                    modules: []
+                });
+                
+                document.getElementById('courseModal').classList.remove('open');
+                e.target.reset();
+                renderMyCourses();
+            };
         }
     </script>
 </body>

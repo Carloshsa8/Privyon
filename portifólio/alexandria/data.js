@@ -4,6 +4,7 @@
 
 const DB_KEYS = {
     users: 'alexandria_users',
+    courses: 'alexandria_courses',
     sales: 'alexandria_sales',
     enrollments: 'alexandria_enrollments',
     reviews: 'alexandria_reviews',
@@ -138,6 +139,7 @@ const DB = {
 
     init() {
         if (!this._get(DB_KEYS.users)) this._set(DB_KEYS.users, defaultUsers);
+        if (!this._get(DB_KEYS.courses) && typeof courses !== 'undefined') this._set(DB_KEYS.courses, courses);
         if (!this._get(DB_KEYS.sales)) this._set(DB_KEYS.sales, defaultSales);
         if (!this._get(DB_KEYS.enrollments)) this._set(DB_KEYS.enrollments, defaultEnrollments);
         if (!this._get(DB_KEYS.reviews)) this._set(DB_KEYS.reviews, defaultReviews);
@@ -147,6 +149,26 @@ const DB = {
     reset() {
         Object.values(DB_KEYS).forEach(k => localStorage.removeItem(k));
         this.init();
+    },
+
+    /* --- Courses --- */
+    getCourses() { return this._get(DB_KEYS.courses) || []; },
+    
+    addCourse(course) {
+        const stored = this.getCourses();
+        course.id = stored.length ? Math.max(...stored.map(c => c.id)) + 1 : 1;
+        stored.push(course);
+        this._set(DB_KEYS.courses, stored);
+        return course;
+    },
+
+    updateCourse(id, updates) {
+        const stored = this.getCourses();
+        const idx = stored.findIndex(c => c.id === id);
+        if (idx === -1) return null;
+        stored[idx] = { ...stored[idx], ...updates };
+        this._set(DB_KEYS.courses, stored);
+        return stored[idx];
     },
 
     /* --- Users --- */

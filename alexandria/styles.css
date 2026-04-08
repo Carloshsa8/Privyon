@@ -94,7 +94,47 @@ img { max-width: 100%; }
 }
 .nav-link:hover, .nav-link.active { color: var(--gold); }
 
-.header-right { display: flex; align-items: center; gap: 1.5rem; justify-content: flex-end; flex: 1; }
+/* ---------- Price Slider ---------- */
+.price-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--gray);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.price-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.price-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
 
 .header-right { display: flex; align-items: center; gap: 1rem; }
 

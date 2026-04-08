@@ -94,6 +94,8 @@ img { max-width: 100%; }
 }
 .nav-link:hover, .nav-link.active { color: var(--gold); }
 
+.header-right { display: flex; align-items: center; gap: 1.5rem; justify-content: flex-end; flex: 1; }
+
 /* ---------- Price Slider ---------- */
 .price-slider {
     -webkit-appearance: none;

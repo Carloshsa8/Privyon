@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadro de Avisos | Residencial Village Damha III</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .notices-hero {
+            padding: 12rem 4rem 6rem;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(10,31,26,0.8), var(--bg-primary)), url('https://images.unsplash.com/photo-1572021335469-3171624c995c?auto=format&fit=crop&q=80&w=1600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 4rem 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.8rem 1.8rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        .filter-chip.active, .filter-chip:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .notices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 3rem;
+            padding: 0 4rem 8rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .notice-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notice-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+        }
+
+        .notice-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            background: var(--accent);
+            color: #000;
+            margin-bottom: 2rem;
+        }
+
+        .notice-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .notice-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .notice-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .notice-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 2rem;
+        }
+
+        /* Admin CRUD UI */
+        #adminPanel {
+            position: fixed;
+            top: 0; right: -500px;
+            width: 500px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--glass-border);
+            z-index: 3000;
+            padding: 6rem 4rem;
+            transition: var(--transition);
+            overflow-y: auto;
+            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+        }
+
+        #adminPanel.open {
+            right: 0;
+        }
+
+        .admin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2900;
+            display: none;
+        }
+
+        .admin-overlay.open {
+            display: block;
+        }
+
+        .admin-btn-fab {
+            position: fixed;
+            bottom: 3rem;
+            right: 3rem;
+            width: 70px;
+            height: 70px;
+            background: var(--accent);
+            color: #000;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            cursor: pointer;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .admin-btn-fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: #fff;
+        }
+
+        @media (max-width: 900px) {
+            .notices-grid { grid-template-columns: 1fr; padding: 0 1.5rem 6rem; }
+            #adminPanel { width: 100%; right: -100%; }
+            .notices-hero { padding: 10rem 1.5rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-overlay" id="overlay"></div>
+    
+    <div id="adminPanel">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">GERENCIAR <span style="color: var(--accent);">AVISO</span></h2>
+        <p style="color: var(--text-secondary); margin-bottom: 4rem;">Crie ou edite um aviso para os moradores.</p>
+        
+        <form id="noticeForm">
+            <input type="hidden" id="editNoticeId">
+            <div class="form-group">
+                <label>Título do Aviso</label>
+                <input type="text" id="noticeTitle" placeholder="Ex: Manutenção da Piscina" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="noticeCategory" required>
+                        <option value="Manutenção">Manutenção</option>
+                        <option value="Segurança">Segurança</option>
+                        <option value="Evento">Evento</option>
+                        <option value="Assembleia">Assembleia</option>
+                        <option value="Informativo">Informativo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prioridade</label>
+                    <select id="noticePriority">
+                        <option value="low">Baixa</option>
+                        <option value="medium" selected>Média</option>
+                        <option value="high">Alta</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Conteúdo do Aviso</label>
+                <textarea id="noticeContent" placeholder="Escreva os detalhes aqui..." required style="height: 200px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Salvar Aviso</button>
+            <button type="button" class="btn btn-outline" style="width: 100%; margin-top: 1rem;" onclick="closeAdmin()">Cancelar</button>
+        </form>
+    </div>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html">Início</a>
+        <a href="agenda.html">Confraria</a>
+        <a href="gallery.html">Galeria</a>
+        <a href="notices.html">Avisos</a>
+        <a href="login.html" class="mobile-cta">Área do Morador</a>
+    </div>
+
+    <header id="main-header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">VD|III</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="agenda.html">Confraria</a></li>
+                <li><a href="gallery.html">Galeria</a></li>
+                <li><a href="notices.html" class="active">Avisos</a></li>
+            </ul>
+            <div id="userNav">
+                <a href="login.html" class="btn btn-outline" style="padding: 0.8rem 1.5rem; font-size: 0.7rem;">Área do Morador</a>
+            </div>
+            <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="notices-hero">
+            <h1 style="font-size: clamp(3rem, 8vw, 6rem);">QUADRO DE<br><span style="color: var(--accent);">AVISOS</span></h1>
+            <p style="margin-top: 2rem; color: var(--text-secondary);">Comunicados oficiais e atualizações para os moradores.</p>
+        </section>
+
+        <section class="category-filter" id="typeFilters">
+            <button class="filter-chip active" data-filter="all">Todos</button>
+            <button class="filter-chip" data-filter="Manutenção">Manutenção</button>
+            <button class="filter-chip" data-filter="Segurança">Segurança</button>
+            <button class="filter-chip" data-filter="Evento">Evento</button>
+            <button class="filter-chip" data-filter="Assembleia">Assembleia</button>
+        </section>
+
+        <div class="notices-grid" id="noticesGrid"></div>
+
+        <div class="admin-btn-fab" id="adminFab" onclick="openAdmin()">+</div>
+    </main>
+
+    <footer class="contact-footer" style="text-align: center; padding: 4rem 0;">
+        <span>© 2026 RESIDENCIAL VILLAGE DAMHA III. TODOS OS DIREITOS RESERVADOS.</span>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Check Auth
+        const currentUser = JSON.parse(localStorage.getItem('damha_currentUser'));
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // Global Nav logic
+        const userNav = document.getElementById('userNav');
+        if (currentUser) {
+            let adminBtnHtml = currentUser.role === 'admin' ? `<a href="admin.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.65rem; color: #000;">Painel Admin</a>` : '';
+            userNav.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="color: var(--accent); font-size: 0.8rem; font-weight: 600;">Olá, ${currentUser.name.split(' ')[0]}</span>
+                    ${adminBtnHtml}
+                    <button onclick="logout()" class="btn btn-outline" style="padding: 0.6rem 1.2rem; font-size: 0.65rem;">Sair</button>
+                </div>
+            `;
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminFab').style.display = 'flex';
+            }
+        }
+        function logout() { localStorage.removeItem('damha_currentUser'); window.location.href = 'index.html'; }
+
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            btn.classList.toggle('open');
+        }
+
+        // Notices Logic
+        let notices = JSON.parse(localStorage.getItem('damha_notices')) || [];
+        let currentFilter = 'all';
+
+        // Seed data if empty
+        if (notices.length === 0) {
+            notices = [
+                {
+                    id: '1',
+                    title: 'Manutenção Preventiva das Piscinas',
+                    content: 'Informamos que na próxima segunda-feira as piscinas estarão fechadas para manutenção semestral periódica.',
+                    category: 'Manutenção',
+                    priority: 'medium',
+                    date: new Date().toISOString()
+                },
+                {
+                    id: '2',
+                    title: 'Reforço na Segurança Perimetral',
+                    content: 'Novas câmeras com inteligência artificial foram instaladas em todo o perímetro do condomínio.',
+                    category: 'Segurança',
+                    priority: 'high',
+                    date: new Date().toISOString()
+                }
+            ];
+            localStorage.setItem('damha_notices', JSON.stringify(notices));
+        }
+
+        function renderNotices() {
+            const grid = document.getElementById('noticesGrid');
+            const filtered = currentFilter === 'all' ? notices : notices.filter(n => n.category === currentFilter);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-secondary); padding: 4rem;">Nenhum aviso encontrado nesta categoria.</p>`;
+                return;
+            }
+
+            // Sort by date (newest first)
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            grid.innerHTML = filtered.map(notice => `
+                <div class="notice-card reveal active">
+                    <span class="notice-badge" style="background: ${getPriorityColor(notice.priority)}">${notice.category}</span>
+                    <span class="notice-date">${new Date(notice.date).toLocaleDateString('pt-BR')}</span>
+                    <h3>${notice.title}</h3>
+                    <p>${notice.content}</p>
+                    ${currentUser.role === 'admin' ? `
+                        <div class="notice-actions">
+                            <button class="btn-action btn-edit" onclick="editNotice('${notice.id}')" style="background: var(--accent); padding: 0.5rem 1rem; border:0; font-family: Outfit; font-weight:700; cursor:pointer;">Editar</button>
+                            <button class="btn-action btn-delete" onclick="deleteNotice('${notice.id}')" style="background: #ef4444; color:white; padding: 0.5rem 1rem; border:0; font-family: Outfit; font-weight:700; cursor:pointer;">Excluir</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function getPriorityColor(priority) {
+            switch(priority) {
+                case 'high': return '#ef4444';
+                case 'medium': return 'var(--accent)';
+                case 'low': return '#059669';
+                default: return 'var(--accent)';
+            }
+        }
+
+        // Admin Panel Functions
+        const adminPanel = document.getElementById('adminPanel');
+        const overlay = document.getElementById('overlay');
+        const noticeForm = document.getElementById('noticeForm');
+
+        function openAdmin() {
+            adminPanel.classList.add('open');
+            overlay.classList.add('open');
+        }
+
+        function closeAdmin() {
+            adminPanel.classList.remove('open');
+            overlay.classList.remove('open');
+            noticeForm.reset();
+            document.getElementById('editNoticeId').value = '';
+        }
+
+        overlay.onclick = closeAdmin;
+
+        noticeForm.onsubmit = (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editNoticeId').value;
+            const title = document.getElementById('noticeTitle').value;
+            const content = document.getElementById('noticeContent').value;
+            const category = document.getElementById('noticeCategory').value;
+            const priority = document.getElementById('noticePriority').value;
+
+            if (id) {
+                notices = notices.map(n => n.id === id ? { ...n, title, content, category, priority } : n);
+            } else {
+                notices.push({
+                    id: Date.now().toString(),
+                    title, content, category, priority,
+                    date: new Date().toISOString()
+                });
+            }
+
+            localStorage.setItem('damha_notices', JSON.stringify(notices));
+            closeAdmin();
+            renderNotices();
+            alert('Aviso salvo com sucesso!');
+        };
+
+        function editNotice(id) {
+            const notice = notices.find(n => n.id === id);
+            if (!notice) return;
+            document.getElementById('editNoticeId').value = notice.id;
+            document.getElementById('noticeTitle').value = notice.title;
+            document.getElementById('noticeContent').value = notice.content;
+            document.getElementById('noticeCategory').value = notice.category;
+            document.getElementById('noticePriority').value = notice.priority;
+            openAdmin();
+        }
+
+        function deleteNotice(id) {
+            if (!confirm('Deseja realmente excluir este aviso?')) return;
+            notices = notices.filter(n => n.id !== id);
+            localStorage.setItem('damha_notices', JSON.stringify(notices));
+            renderNotices();
+        }
+
+        // Filter Logic
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.onclick = () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentFilter = chip.dataset.filter;
+                renderNotices();
+            };
+        });
+
+        // Initialize
+        renderNotices();
+    </script>
+</body>
+</html>

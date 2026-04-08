@@ -48,9 +48,12 @@
         </aside>
 
         <main class="dash-content">
-            <div class="dash-content-header">
-                <h1 class="dash-page-title">Gerenciar Usuários</h1>
-                <p class="dash-page-desc">Todos os usuários cadastrados na plataforma</p>
+            <div class="dash-content-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="dash-page-title">Gerenciar Usuários</h1>
+                    <p class="dash-page-desc">Todos os usuários cadastrados na plataforma</p>
+                </div>
+                <button class="btn btn-primary" onclick="document.getElementById('newUserModal').classList.add('open')">Novo Usuário</button>
             </div>
 
             <div class="stats-grid" id="userStats"></div>
@@ -68,28 +71,68 @@
         </main>
     </div>
 
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-header"><h3 class="modal-title">Editar Usuário</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
-            <div class="modal-body">
-                <input type="hidden" id="editUserId">
-                <label style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Nome</label>
-                <input type="text" class="form-input" id="editName">
-                <label style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Email</label>
-                <input type="email" class="form-input" id="editEmail">
-                <label style="font-size:0.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Função</label>
-                <select class="form-input" id="editRole">
-                    <option value="aluno">Aluno</option>
-                    <option value="professor">Professor</option>
-                    <option value="admin">Administrador</option>
-                </select>
+    <div class="modal-overlay" id="newUserModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold);">Novo Usuário</h2>
+                <button onclick="document.getElementById('newUserModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-sm" onclick="closeModal()">Cancelar</button>
-                <button class="btn btn-sm btn-primary" onclick="saveUser()">Salvar</button>
-            </div>
+            <form id="newUserForm" onsubmit="handleCreateUser(event)">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome Completo</label>
+                    <input type="text" id="nName" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Email</label>
+                    <input type="email" id="nEmail" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Senha Temporária</label>
+                    <input type="text" id="nPass" required value="alexandria123" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="margin-bottom:1.5rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Função / Nível de Acesso</label>
+                    <select id="nRole" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                        <option value="aluno">Aluno</option>
+                        <option value="professor">Professor</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Criar Usuário</button>
+            </form>
         </div>
     </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold);">Editar Usuário</h2>
+                <button onclick="closeModal()" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="editUserForm" onsubmit="handleSaveUser(event)">
+                <input type="hidden" id="editUserId">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome</label>
+                    <input type="text" id="editName" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Email</label>
+                    <input type="email" id="editEmail" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="margin-bottom:1.5rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Função</label>
+                    <select id="editRole" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                        <option value="aluno">Aluno</option>
+                        <option value="professor">Professor</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+    <style> .modal-overlay.open { display: flex !important; } </style>
 
     <script src="../courses.js"></script>
     <script src="../data.js"></script>
@@ -138,6 +181,19 @@
             renderUsers(filtered);
         }
 
+        window.handleCreateUser = function(e) {
+            e.preventDefault();
+            DB.addUser({
+                name: document.getElementById('nName').value,
+                email: document.getElementById('nEmail').value,
+                password: document.getElementById('nPass').value,
+                role: document.getElementById('nRole').value
+            });
+            document.getElementById('newUserModal').classList.remove('open');
+            e.target.reset();
+            loadUsers();
+        };
+
         function editUser(id) {
             const u = DB.getUserById(id);
             if (!u) return;
@@ -150,7 +206,8 @@
 
         function closeModal() { document.getElementById('editModal').classList.remove('open'); }
 
-        function saveUser() {
+        window.handleSaveUser = function(e) {
+            e.preventDefault();
             const id = parseInt(document.getElementById('editUserId').value);
             DB.updateUser(id, {
                 name: document.getElementById('editName').value,

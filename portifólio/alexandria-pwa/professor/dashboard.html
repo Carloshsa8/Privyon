@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Professor - Alexandria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">Alexandria</a>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link active">Painel</a>
+                <a href="cursos.html" class="nav-link">Meus Cursos</a>
+                <a href="aulas.html" class="nav-link">Aulas</a>
+            </nav>
+            <div class="header-right">
+                <div id="authHeaderActions" class="auth-header-actions"></div>
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+                    <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
+        <a href="cursos.html" class="mobile-nav-link">Meus Cursos</a>
+        <a href="aulas.html" class="mobile-nav-link">Aulas</a>
+    </div>
+
+    <div class="dashboard-layout">
+        <aside class="dash-sidebar">
+            <div class="dash-sidebar-header">
+                <div class="dash-sidebar-role">Professor</div>
+                <div class="dash-sidebar-name" id="profName">Professor</div>
+                <button onclick="openProfileModal()" style="background:none; border:none; color:var(--gold); font-size:0.75rem; cursor:pointer; padding:0; margin-top:0.25rem; text-decoration:underline;">Editar Perfil</button>
+            </div>
+            <nav class="dash-sidebar-nav">
+                <a href="dashboard.html" class="dash-nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
+                </a>
+                <a href="cursos.html" class="dash-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Meus Cursos
+                </a>
+                <a href="aulas.html" class="dash-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>Gerenciar Aulas
+                </a>
+            </nav>
+        </aside>
+
+        <main class="dash-content">
+            <div class="dash-content-header">
+                <h1 class="dash-page-title">Meu Painel</h1>
+                <p class="dash-page-desc">Visão geral dos seus cursos</p>
+            </div>
+
+            <div class="stats-grid" id="profStats"></div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Meus Cursos</h3>
+                <div class="student-courses-grid" id="profCoursesGrid"></div>
+            </div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Últimas Avaliações</h3>
+                <div id="profReviews"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../courses.js"></script>
+    <script src="../data.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        if (!Auth.requireAuth(['professor', 'admin'])) {}
+        else {
+            const user = Auth.getCurrentUser();
+            document.getElementById('profName').textContent = user.name;
+
+            const myCourses = user.role === 'admin' ? getAllCourses() : getCoursesByInstructor(user.id);
+            let totalStudents = 0, totalRevenue = 0, totalReviews = 0;
+
+            myCourses.forEach(c => {
+                const enrolled = DB.getEnrollmentsByCourse(c.id).length;
+                totalStudents += c.students + enrolled;
+                const sales = DB.getSalesByCourse(c.id).filter(s=>s.status==='completed');
+                totalRevenue += sales.reduce((s,v)=>s+v.price,0);
+                totalReviews += DB.getReviewsByCourse(c.id).length;
+            });
+
+            document.getElementById('profStats').innerHTML = `
+                <a href="cursos.html" class="stat-card" style="text-decoration:none; display:block;">
+                    <div class="stat-label">Meus Cursos</div>
+                    <div class="stat-value">${myCourses.length}</div>
+                </a>
+                <div class="stat-card" style="cursor:pointer;" onclick="openStudentsModal()">
+                    <div class="stat-label">Total de Alunos</div>
+                    <div class="stat-value">${totalStudents}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Receita Gerada</div>
+                    <div class="stat-value">${formatPrice(totalRevenue)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avaliações</div>
+                    <div class="stat-value">${totalReviews}</div>
+                </div>
+            `;
+
+            // Courses Grid
+            document.getElementById('profCoursesGrid').innerHTML = myCourses.map(c => {
+                const enrolled = DB.getEnrollmentsByCourse(c.id).length;
+                const rating = DB.getCourseRating(c.id);
+                return `
+                    <a href="cursos.html" class="student-course-card" style="text-decoration:none; display:block; transition: transform 0.2s;">
+                        <style>.student-course-card:hover { transform: translateY(-5px); border-color: var(--gold); }</style>
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                            <div class="course-icon" style="width:40px;height:40px;">${courseImages[c.image]||courseImages.notion}</div>
+                            <span class="course-category">${c.category}</span>
+                        </div>
+                        <div class="student-course-title" style="color:var(--text);">${c.name}</div>
+                        <div style="display:flex;gap:1.5rem;margin-top:1rem;font-size:0.85rem;color:var(--text-dim);">
+                            <span>👤 ${c.students + enrolled} alunos</span>
+                            <span style="color:var(--gold);">★ ${rating.avg || c.rating}</span>
+                            <span style="color:var(--gold);">${formatPrice(c.price)}</span>
+                        </div>
+                    </a>
+                `;
+            }).join('') || '<p style="color:var(--text-dim);">Nenhum curso encontrado.</p>';
+
+            // Reviews
+            let allReviews = [];
+            myCourses.forEach(c => {
+                DB.getReviewsByCourse(c.id).forEach(r => {
+                    allReviews.push({...r, courseName: c.shortName});
+                });
+            });
+            allReviews.sort((a,b) => b.date.localeCompare(a.date));
+
+            document.getElementById('profReviews').innerHTML = allReviews.slice(0,5).map(r => {
+                const u = DB.getUserById(r.userId);
+                return `<div class="review-card">
+                    <div class="review-header">
+                        <span class="review-author">${u?u.name:'Aluno'} · <span style="color:var(--text-dim);font-size:0.8rem;">${r.courseName}</span></span>
+                        <span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                    </div>
+                    <p class="review-text">${r.comment}</p>
+                </div>`;
+            }).join('') || '<p style="color:var(--text-dim);padding:1rem;">Nenhuma avaliação ainda.</p>';
+        }
+
+        window.openStudentsModal = function() {
+            const user = Auth.getCurrentUser();
+            const myCourses = getCoursesByInstructor(user.id);
+            const myCourseIds = myCourses.map(c => c.id);
+            const enrollments = DB.getEnrollments().filter(e => myCourseIds.includes(e.courseId));
+            
+            let rows = enrollments.map(e => {
+                const student = DB.getUserById(e.userId);
+                const course = myCourses.find(c => c.id === e.courseId);
+                return `
+                    <tr>
+                        <td style="color:var(--text); padding: 1rem;">${student ? student.name : 'Aluno'}</td>
+                        <td style="color:var(--text-dim); padding: 1rem;">${course ? course.name : 'Curso'}</td>
+                        <td style="color:var(--gold); padding: 1rem;">${e.progress}%</td>
+                        <td style="color:var(--text-dim); padding: 1rem;">${new Date(e.enrolledAt).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum aluno matriculado ainda via plataforma.</td></tr>';
+
+            const modalHtml = `
+                <div class="modal-overlay open" id="studentsModal" style="display:flex !important; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
+                    <div class="modal" style="max-width:800px; width:100%; background:var(--dark); border:1px solid var(--border);">
+                        <div class="modal-header" style="border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 class="modal-title">Lista de Alunos</h3>
+                            <button class="modal-close" onclick="document.getElementById('studentsModal').remove()" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer;">&times;</button>
+                        </div>
+                        <div class="modal-body" style="padding:2rem;">
+                            <div class="data-table-wrapper">
+                                <table class="data-table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="border-bottom:1px solid var(--border); text-align:left;">
+                                            <th style="padding:1rem;">Aluno</th>
+                                            <th style="padding:1rem;">Curso</th>
+                                            <th style="padding:1rem;">Progresso</th>
+                                            <th style="padding:1rem;">Matrícula</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${rows}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        };
+
+        window.openProfileModal = function() {
+            const user = Auth.getCurrentUser();
+            const modalHtml = `
+                <div class="modal-overlay open" id="profileModal" style="display:flex !important; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
+                    <div class="modal" style="max-width:500px; width:100%; background:var(--dark); border:1px solid var(--border);">
+                        <div class="modal-header" style="border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 class="modal-title">Meu Perfil</h3>
+                            <button class="modal-close" onclick="document.getElementById('profileModal').remove()" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer;">&times;</button>
+                        </div>
+                        <div class="modal-body" style="padding:2rem;">
+                            <form onsubmit="handleUpdateProfile(event)">
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome</label>
+                                    <input type="text" id="pName" value="${user.name}" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text);">
+                                </div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--gold); font-size:0.9rem;">Especialidade</label>
+                                    <input type="text" id="pSpecialty" value="${user.specialty || ''}" placeholder="Ex: Produtividade & Automação" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--gold);">
+                                </div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Biografia / Descrição</label>
+                                    <textarea id="pBio" rows="4" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text); font-family:inherit;">${user.bio || ''}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Perfil</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        };
+
+        window.handleUpdateProfile = function(e) {
+            e.preventDefault();
+            const user = Auth.getCurrentUser();
+            const updates = {
+                name: document.getElementById('pName').value,
+                specialty: document.getElementById('pSpecialty').value,
+                bio: document.getElementById('pBio').value
+            };
+            
+            DB.updateUser(user.id, updates);
+            
+            // Update local session
+            const session = Auth.getSession();
+            Auth._saveSession({ ...session, ...updates });
+
+            alert('Perfil atualizado com sucesso!');
+            document.getElementById('profileModal').remove();
+            location.reload();
+        };
+    </script>
+</body>
+</html>

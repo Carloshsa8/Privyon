@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Manor | Espaço Híbrido de Eventos & Buffet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="inner">
+            <a href="#" class="logo">Grand<span>Manor</span></a>
+            <div class="nav-links">
+                <a href="#experiencia">A Experiência</a>
+                <a href="#versatilidade">Versatilidade</a>
+                <a href="#gastronomia">Gastronomia</a>
+                <a href="#reservas">Reservas</a>
+            </div>
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Menu Mobile -->
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="#experiencia" onclick="toggleMenu()">A Experiência</a>
+        <a href="#versatilidade" onclick="toggleMenu()">Versatilidade</a>
+        <a href="#gastronomia" onclick="toggleMenu()">Gastronomia</a>
+        <a href="#reservas" onclick="toggleMenu()">Reservas</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg" style="background-image: url('assets/hero.png');"></div>
+        <div class="hero-content">
+            <span class="reveal">Welcome to Infinity</span>
+            <h1 class="reveal">Um Espaço, <br><span>Infinitas Possibilidades</span></h1>
+            <p class="reveal">A união perfeita entre a magia do mundo infantil e a sofisticação dos grandes eventos sociais e corporativos.</p>
+            <div class="hero-buttons reveal">
+                <a href="#contato" class="btn btn-gold">Solicitar Proposta</a>
+                <a href="#versatilidade" class="btn btn-outline">Conhecer o Espaço</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll</span>
+        </div>
+    </header>
+
+    <!-- The Concept -->
+    <section id="experiencia" class="section section-concept">
+        <div class="container">
+            <div class="concept-grid">
+                <div class="concept-text">
+                    <h2 class="section-title">O Templo das <br><span>Celebrações</span></h2>
+                    <p>No Grand Manor, não apenas alugamos um salão. Oferecemos uma infraestrutura camaleônica, capaz de se transformar no reino dos sonhos de uma criança à tarde e palco de um coquetel de gala ao anoitecer.</p>
+                    <div class="features-list">
+                        <div class="feat">
+                            <strong>Acústica de Estúdio</strong>
+                            <p>Isolamento e som de alta fidelidade para apresentações.</p>
+                        </div>
+                        <div class="feat">
+                            <strong>Luz Inteligente</strong>
+                            <p>Cenários de iluminação RGB controlados por Ipad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="concept-visual">
+                    <div class="img-box">
+                        <img src="assets/kids.png" alt="Área Kids Sofisticada">
+                        <div class="img-badge">O Play Kids</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Versatility -->
+    <section id="versatilidade" class="section section-versatility">
+        <div class="container">
+            <div class="section-header center">
+                <h2 class="section-title">Duas Almas, <span>Um Destino</span></h2>
+                <p>Nossa engenharia modular permite configurações exclusivas para cada perfil de evento.</p>
+            </div>
+            <div class="modes-grid">
+                <div class="mode-card">
+                    <div class="mode-icon">🎩</div>
+                    <h3>Corporativo & Social</h3>
+                    <p>Casamentos, 15 anos e eventos empresariais com todo o requinte e tecnologia que seu projeto exige.</p>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-icon">🚀</div>
+                    <h3>Family & Kids</h3>
+                    <p>Uma abordagem moderna para festas infantis, com entretenimento de alto nível integrado ao ambiente luxuoso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gastromony -->
+    <section id="gastronomia" class="section section-gastronomy bg-dark">
+        <div class="container">
+            <div class="gastronomy-layout">
+                <div class="gas-img">
+                    <img src="assets/food.png" alt="Gastronomia Fine Dining">
+                </div>
+                <div class="gas-content">
+                    <span class="label">Fine Dining Experience</span>
+                    <h2 class="section-title">Paladar <br><span>Extraordinário</span></h2>
+                    <p>Nossa cozinha é comandada por chefs renomados, criando menus que são verdadeiras obras de arte sensoriais.</p>
+                    <a href="#" class="btn btn-outline">Explorar Menus Gourmet</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="reservas" class="section section-contact">
+        <div class="container">
+            <div class="contact-card">
+                <div class="contact-header">
+                    <h2>Agende sua <span>Experiência</span></h2>
+                    <p>Nossos consultores estão prontos para desenhar seu evento exclusivo.</p>
+                </div>
+                <form class="luxury-form">
+                    <div class="form-row">
+                        <input type="text" placeholder="Seu Nome Completo">
+                        <input type="email" placeholder="Seu Melhor E-mail">
+                    </div>
+                    <div class="form-row">
+                        <select>
+                            <option>Tipo de Evento</option>
+                            <option>Social (Casamento/15 anos)</option>
+                            <option>Infantil Atípico</option>
+                            <option>Corporativo Híbrido</option>
+                        </select>
+                        <input type="text" placeholder="Data Pretendida">
+                    </div>
+                    <textarea placeholder="Conte-nos o seu sonho..."></textarea>
+                    <button type="submit" class="btn btn-gold btn-full">Solicitar Orçamento Premium</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-logo">Grand<span>Manor</span></div>
+                <p>&copy; 2026 GRAND MANOR EVENTS. EXCLUSIVIDADE EM CADA DETALHE.</p>
+                <div class="social-links">
+                    <a href="#">IG</a>
+                    <a href="#">IN</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp FAB -->
+    <a href="#" class="fab-whatsapp">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-2.203 0-4.394 1.242-4.394 3.941 0 1.977 1.382 2.989 3.087 2.989 1.054 0 1.945-.351 1.945-1.306 0-.327-.136-.572-.408-.572-.204 0-.341.069-.545.163-.341.157-.545.212-.817.212-.614 0-.955-.408-.955-1.117 0-.79.545-2.022 1.945-2.022.955 0 1.634.614 1.634 1.531 0 1.579-1.074 2.822-2.593 2.822-1.054 0-1.875-.518-2.284-1.117h-.068c-.035 1.579.511 2.989 2.011 2.989 1.571 0 2.933-1.054 3.75-2.659.34-.654.545-1.382.545-2.144 0-2.315-1.776-3.729-4.25-3.729zM12 2C6.477 2 2 6.477 2 12c0 1.891.527 3.655 1.446 5.162L2 22l4.988-1.312C8.361 21.516 10.106 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.724 0-3.32-.423-4.719-1.168l-3.376.889.907-3.083C4.103 15.225 3.5 13.684 3.5 12 3.5 7.305 7.305 3.5 12 3.5S20.5 7.305 20.5 12 16.695 20.5 12 20.5z"/></svg>
+    </a>
+
+    <script src="main.js"></script>
+</body>
+</html>

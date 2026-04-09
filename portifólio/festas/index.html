@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alegria Kids | Buffet Infantil & Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">ALEGRIA<span>KIDS</span></a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#espaco">O Espaço</a></li>
+                <li><a href="#gastronomia">Gastronomia</a></li>
+                <li><a href="#pacotes">Pacotes</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <a href="https://wa.me/5500000000000" class="btn btn-primary nav-cta">Solicitar Orçamento</a>
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#inicio" onclick="toggleMenu()">Início</a>
+        <a href="#espaco" onclick="toggleMenu()">O Espaço</a>
+        <a href="#gastronomia" onclick="toggleMenu()">Gastronomia</a>
+        <a href="#pacotes" onclick="toggleMenu()">Pacotes</a>
+        <a href="#contato" onclick="toggleMenu()">Contato</a>
+        <a href="https://wa.me/5500000000000" class="btn btn-primary">Orçamento Via WhatsApp</a>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="hero">
+            <div class="hero-bg" style="background-image: url('assets/hero.png');"></div>
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <span class="badge">Onde a diversão encontra a magia</span>
+                    <h1>Transformamos sonhos em <span class="text-gradient">festas inesquecíveis</span></h1>
+                    <p>O buffet infantil mais moderno e completo da região, com infraestrutura de luxo, segurança total e gastronomia apaixonante.</p>
+                    <div class="hero-btns">
+                        <a href="#pacotes" class="btn btn-primary">Ver Nossos Pacotes</a>
+                        <a href="#espaco" class="btn btn-outline">Conhecer o Espaço</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats/Features -->
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎮</div>
+                        <h3>Brinquedos Modernos</h3>
+                        <p>Atrações de última geração para todas as idades.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Segurança Total</h3>
+                        <p>Monitoramento e monitores treinados em tempo integral.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🍔</div>
+                        <h3>Gastronomia Premium</h3>
+                        <p>Cardápios artesanais que encantam crianças e adultos.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✨</div>
+                        <h3>Temas Exclusivos</h3>
+                        <p>Decorações personalizadas que criam mundos mágicos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nosso Espaço -->
+        <section id="espaco" class="section-padding">
+            <div class="container">
+                <div class="split-section">
+                    <div class="split-image">
+                        <img src="assets/playground.png" alt="Nosso Playground">
+                    </div>
+                    <div class="split-content">
+                        <span class="subtitle">Infraestrutura</span>
+                        <h2>Um Playground de <span class="text-secondary">Próxima Geração</span></h2>
+                        <p>Nosso espaço foi projetado para oferecer o máximo de diversão com segurança. Contamos com circuitos de obstáculos, tobogãs gigantes, área baby exclusiva e games interativos.</p>
+                        <ul class="check-list">
+                            <li>Circuito de Arvorismo Indoor</li>
+                            <li>Piscina de Bolinhas Gigante</li>
+                            <li>Área de Games e Realidade Virtual</li>
+                            <li>Salão de Festas Climatizado com Capacidade para 200 pessoas</li>
+                        </ul>
+                        <a href="https://wa.me/5500000000000" class="btn btn-text">Agende uma visita guiada &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gastronomia -->
+        <section id="gastronomia" class="section-padding bg-light">
+            <div class="container">
+                <div class="split-section reverse">
+                    <div class="split-image">
+                        <img src="assets/food.png" alt="Nossa Gastronomia">
+                    </div>
+                    <div class="split-content">
+                        <span class="subtitle">Gastronomia</span>
+                        <h2>Sabores que <span class="text-secondary">Encantam</span></h2>
+                        <p>Esqueça o buffet comum. Nossa gastronomia é preparada com ingredientes selecionados, unindo os clássicos infantis com toques gourmet para os adultos.</p>
+                        <ul class="check-list">
+                            <li>Salgados Artesanais (Fritos na hora)</li>
+                            <li>Buffet de Mini Burgers Gourmet</li>
+                            <li>Mesa de Doces Finos e Personalizados</li>
+                            <li>Opções Saudáveis e para Alérgicos</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline">Ver Cardápio Completo (PDF)</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pacotes -->
+        <section id="pacotes" class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="subtitle">Planejamento</span>
+                    <h2>Nossos Pacotes de <span class="text-secondary">Felicidade</span></h2>
+                    <p>Escolha o formato que melhor se adapta ao seu sonho.</p>
+                </div>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="price-header">
+                            <h3>Pack Diversão</h3>
+                            <div class="price">Ideal para festas menores</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Até 40 Convidados</li>
+                            <li>4 Horas de Festa</li>
+                            <li>Menu Degustação Kids</li>
+                            <li>2 Monitores Especializados</li>
+                            <li>Decoração Temática Básica</li>
+                        </ul>
+                        <a href="https://wa.me/5500000000000" class="btn btn-outline btn-full">Consultar Preço</a>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="price-header">
+                            <h3>Pack Premium</h3>
+                            <div class="price">O nosso mais vendido</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Até 80 Convidados</li>
+                            <li>5 Horas de Festa</li>
+                            <li>Menu Gourmet Completo</li>
+                            <li>4 Monitores + Coordenador</li>
+                            <li>Decoração Temática Luxo</li>
+                            <li>Convites Digitais Inclusos</li>
+                        </ul>
+                        <a href="https://wa.me/5500000000000" class="btn btn-primary btn-full">Solicitar Orçamento</a>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="price-header">
+                            <h3>Pack Mágico</h3>
+                            <div class="price">A experiência definitiva</div>
+                        </div>
+                        <ul class="price-features">
+                            <li>Até 150 Convidados</li>
+                            <li>6 Horas de Festa</li>
+                            <li>Menu All-Inclusive Luxo</li>
+                            <li>Equipe Completa de Recreação</li>
+                            <li>Decoração Cenográfica 3D</li>
+                            <li>Cobertura Fotográfica Inclusa</li>
+                        </ul>
+                        <a href="https://wa.me/5500000000000" class="btn btn-outline btn-full">Consultar Preço</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="testimonials section-padding bg-dark">
+            <div class="container">
+                <div class="section-header">
+                    <h2 style="color: white;">O que dizem os <span class="text-secondary">Pais</span></h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p>"A festa do meu filho foi impecável. A equipe é extremamente atenciosa e a comida é maravilhosa. O melhor buffet de Rio Preto!"</p>
+                        <div class="author">
+                            <div class="author-info">
+                                <strong>Mariana Silva</strong>
+                                <span>Mãe do Léo (5 anos)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p>"Os brinquedos são novos e super seguros. Fiquei muito tranquila vendo as crianças brincarem enquanto aproveitava o jantar."</p>
+                        <div class="author">
+                            <div class="author-info">
+                                <strong>Ricardo Oliveira</strong>
+                                <span>Pai da Bia (7 anos)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Newsletter -->
+        <section id="contato" class="contact section-padding">
+            <div class="container">
+                <div class="contact-box">
+                    <div class="contact-info">
+                        <h2>Vamos celebrar <br><span class="text-gradient">juntos?</span></h2>
+                        <p>Entre em contato e descubra como podemos tornar a festa do seu filho um marco histórico.</p>
+                        <div class="contact-details">
+                            <div class="detail-item">
+                                <strong>Endereço</strong>
+                                <p>Av. das Américas, 1500 - Village Damha III, Rio Preto - SP</p>
+                            </div>
+                            <div class="detail-item">
+                                <strong>WhatsApp</strong>
+                                <p>(17) 99999-9999</p>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Email</strong>
+                                <p>ola@alegriakids.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label>Seu Nome</label>
+                            <input type="text" placeholder="Ex: Maria Oliveira">
+                        </div>
+                        <div class="form-group">
+                            <label>Data Prevista</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Convidados</label>
+                            <input type="number" placeholder="Ex: 50">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Enviar Pedido de Orçamento</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 ALEGRIA KIDS BUFFET. TODOS OS DIREITOS RESERVADOS.</p>
+                <div class="footer-social">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp FAB -->
+    <a href="https://wa.me/5500000000000" class="whatsapp-fab" target="_blank">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12.031 6.172c-2.203 0-4.394 1.242-4.394 3.941 0 1.977 1.382 2.989 3.087 2.989 1.054 0 1.945-.351 1.945-1.306 0-.327-.136-.572-.408-.572-.204 0-.341.069-.545.163-.341.157-.545.212-.817.212-.614 0-.955-.408-.955-1.117 0-.79.545-2.022 1.945-2.022.955 0 1.634.614 1.634 1.531 0 1.579-1.074 2.822-2.593 2.822-1.054 0-1.875-.518-2.284-1.117h-.068c-.035 1.579.511 2.989 2.011 2.989 1.571 0 2.933-1.054 3.75-2.659.34-.654.545-1.382.545-2.144 0-2.315-1.776-3.729-4.25-3.729zM12 2C6.477 2 2 6.477 2 12c0 1.891.527 3.655 1.446 5.162L2 22l4.988-1.312C8.361 21.516 10.106 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.724 0-3.32-.423-4.719-1.168l-3.376.889.907-3.083C4.103 15.225 3.5 13.684 3.5 12 3.5 7.305 7.305 3.5 12 3.5S20.5 7.305 20.5 12 16.695 20.5 12 20.5z"/></svg>
+    </a>
+
+    <script src="main.js"></script>
+</body>
+</html>

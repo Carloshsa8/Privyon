@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Cursos - Professor - Alexandria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css?v=3">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">Alexandria</a>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link">Painel</a>
+                <a href="cursos.html" class="nav-link active">Meus Cursos</a>
+                <a href="aulas.html" class="nav-link">Aulas</a>
+            </nav>
+            <div class="header-right">
+                <div id="authHeaderActions" class="auth-header-actions"></div>
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+                    <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
+        <a href="cursos.html" class="mobile-nav-link">Meus Cursos</a>
+        <a href="aulas.html" class="mobile-nav-link">Aulas</a>
+    </div>
+
+    <div class="dashboard-layout">
+        <aside class="dash-sidebar">
+            <div class="dash-sidebar-header">
+                <div class="dash-sidebar-role">Professor</div>
+                <div class="dash-sidebar-name" id="profName">Professor</div>
+                <button onclick="openProfileModal()" style="background:none; border:none; color:var(--gold); font-size:0.75rem; cursor:pointer; padding:0; margin-top:0.25rem; text-decoration:underline;">Editar Perfil</button>
+            </div>
+            <nav class="dash-sidebar-nav">
+                <a href="dashboard.html" class="dash-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+                <a href="cursos.html" class="dash-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Meus Cursos</a>
+                <a href="aulas.html" class="dash-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>Gerenciar Aulas</a>
+            </nav>
+        </aside>
+
+        <main class="dash-content">
+            <div class="dash-content-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="dash-page-title">Meus Cursos</h1>
+                    <p class="dash-page-desc">Gerencie seus cursos publicados</p>
+                </div>
+                <button class="btn btn-primary" onclick="document.getElementById('courseModal').classList.add('open')">Novo Curso</button>
+            </div>
+
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead><tr><th>Curso</th><th>Categoria</th><th>Preço</th><th>Alunos</th><th>Rating</th><th>Módulos</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="profCoursesBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="courseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold);">Criar Novo Curso</h2>
+                <button onclick="document.getElementById('courseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="courseForm" onsubmit="handleCreateCourse(event)">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Título do Curso</label>
+                    <input type="text" id="cTitle" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Categoria</label>
+                        <input type="text" id="cCat" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Imagem (nome ícone)</label>
+                        <input type="text" id="cImg" value="notion" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Descrição</label>
+                    <textarea id="cDesc" required rows="3" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px; max-width: 100%"></textarea>
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.8rem;">Mínimo (R$)</label>
+                        <input type="number" id="cMinPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--gold); font-size:0.8rem;">Ideal (R$)</label>
+                        <input type="number" id="cIdealPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gold); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.8rem;">Máximo (R$)</label>
+                        <input type="number" id="cMaxPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <div style="margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                    <input type="checkbox" id="cFreeValue">
+                    <label for="cFreeValue" style="color:var(--gold); font-size:0.9rem;">Curso com Valor Livre (Aluno escolhe quanto pagar)</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Curso e Publicar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div class="modal-overlay" id="editCourseModal" style="display:none; position:fixed; top:0; left:0; width:100vw; max-width:none; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:flex-start; justify-content:flex-end; padding:0;">
+        <div class="modal-content" style="background:#121212; width:90%; max-width:500px; height:100vh; padding:2rem; border-left:1px solid var(--gold); overflow-y:auto; margin:0; box-sizing:border-box;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold);">Editar Curso</h2>
+                <button onclick="document.getElementById('editCourseModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="editCourseForm" onsubmit="handleUpdateCourse(event)">
+                <input type="hidden" id="eCourseId">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Título do Curso</label>
+                    <input type="text" id="eTitle" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Categoria</label>
+                        <input type="text" id="eCat" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Imagem (nome ícone)</label>
+                        <input type="text" id="eImg" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Descrição</label>
+                    <textarea id="eDesc" required rows="3" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px; max-width: 100%"></textarea>
+                </div>
+                <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.8rem;">Mínimo (R$)</label>
+                        <input type="number" id="eMinPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--gold); font-size:0.8rem;">Ideal (R$)</label>
+                        <input type="number" id="eIdealPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gold); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.8rem;">Máximo (R$)</label>
+                        <input type="number" id="eMaxPrice" required min="0" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                </div>
+                <div style="margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                    <input type="checkbox" id="eFreeValue">
+                    <label for="eFreeValue" style="color:var(--gold); font-size:0.9rem;">Curso com Valor Livre (Aluno escolhe quanto pagar)</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+    <style> .modal-overlay.open { display: flex !important; } </style>
+
+    <script src="../courses.js"></script>
+    <script src="../data.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        if (!Auth.requireAuth(['professor', 'admin'])) {}
+        else {
+            const user = Auth.getCurrentUser();
+            document.getElementById('profName').textContent = user.name;
+
+            const renderMyCourses = () => {
+                const myCourses = user.role === 'admin' ? getAllCourses() : getCoursesByInstructor(user.id);
+                document.getElementById('profCoursesBody').innerHTML = myCourses.map(c => {
+                    const enrolled = DB.getEnrollmentsByCourse(c.id).length;
+                    const rating = DB.getCourseRating(c.id);
+                    const totalLessons = c.modules ? c.modules.reduce((s,m)=>s+m.lessons.length,0) : 0;
+                    return `<tr>
+                        <td style="color:var(--text)">${c.name}</td>
+                        <td><span class="badge badge-info">${c.category}</span></td>
+                        <td style="color:var(--gold); white-space: nowrap;">${formatPrice(c.minPrice || c.price)} - ${formatPrice(c.maxPrice || c.price)}</td>
+                        <td>${(c.students || 0) + enrolled}</td>
+                        <td style="color:var(--gold)">★ ${rating.avg || c.rating || 0}</td>
+                        <td>${c.modules ? c.modules.length : 0} módulos · ${totalLessons} aulas · ${DB.getCourseTotalDuration(c)}</td>
+                        <td><span class="badge ${c.published?'badge-success':'badge-warning'}">${c.published?'Publicado':'Rascunho'}</span></td>
+                        <td class="actions-cell">
+                            <button class="action-btn" onclick="openEditCourse(${c.id})">Editar</button>
+                            <button class="action-btn" onclick="toggleCoursePublished(${c.id})">${c.published?'Desativar':'Ativar'}</button>
+                            <button class="action-btn action-btn-danger" onclick="deleteCourse(${c.id})">Deletar</button>
+                            <a href="aulas.html?courseId=${c.id}" class="action-btn" style="text-decoration:none;">Gerenciar</a>
+                            <a href="../curso-detalhe.html?id=${c.id}" class="action-btn" style="text-decoration:none;">Ver Página</a>
+                        </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:2rem;">Nenhum curso encontrado</td></tr>';
+            };
+            
+            renderMyCourses();
+            
+            window.handleCreateCourse = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('cTitle').value;
+                const cat = document.getElementById('cCat').value;
+                const desc = document.getElementById('cDesc').value;
+                const minPrice = parseFloat(document.getElementById('cMinPrice').value);
+                const idealPrice = parseFloat(document.getElementById('cIdealPrice').value);
+                const maxPrice = parseFloat(document.getElementById('cMaxPrice').value);
+                const freeValue = document.getElementById('cFreeValue').checked;
+                const img = document.getElementById('cImg').value;
+                
+                DB.addCourse({
+                    name: title,
+                    shortName: title.split(':')[0] || title,
+                    category: cat,
+                    description: desc,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    price: idealPrice,
+                    freeValue: freeValue,
+                    image: img,
+                    instructorId: user.id,
+                    level: "Iniciante",
+                    duration: "0h",
+                    students: 0,
+                    rating: 5.0,
+                    published: true,
+                    modules: []
+                });
+                
+                document.getElementById('courseModal').classList.remove('open');
+                e.target.reset();
+                renderMyCourses();
+            };
+
+            window.openEditCourse = function(id) {
+                const course = getCourseById(id);
+                if (!course) return;
+
+                document.getElementById('eCourseId').value = course.id;
+                document.getElementById('eTitle').value = course.name;
+                document.getElementById('eCat').value = course.category;
+                document.getElementById('eImg').value = course.image;
+                document.getElementById('eDesc').value = course.description;
+                document.getElementById('eMinPrice').value = course.minPrice || course.price;
+                document.getElementById('eIdealPrice').value = course.price;
+                document.getElementById('eMaxPrice').value = course.maxPrice || course.price;
+                document.getElementById('eFreeValue').checked = course.freeValue || false;
+
+                document.getElementById('editCourseModal').classList.add('open');
+            }
+
+            window.handleUpdateCourse = function(e) {
+                e.preventDefault();
+                const id = parseInt(document.getElementById('eCourseId').value);
+                const title = document.getElementById('eTitle').value;
+                
+                DB.updateCourse(id, {
+                    name: title,
+                    shortName: title.split(':')[0] || title,
+                    category: document.getElementById('eCat').value,
+                    image: document.getElementById('eImg').value,
+                    description: document.getElementById('eDesc').value,
+                    minPrice: parseFloat(document.getElementById('eMinPrice').value),
+                    price: parseFloat(document.getElementById('eIdealPrice').value),
+                    maxPrice: parseFloat(document.getElementById('eMaxPrice').value),
+                    freeValue: document.getElementById('eFreeValue').checked
+                });
+
+                document.getElementById('editCourseModal').classList.remove('open');
+                renderMyCourses();
+            };
+
+            window.toggleCoursePublished = function(id) {
+                const course = getCourseById(id);
+                if (!course) return;
+                DB.updateCourse(id, { published: !course.published });
+                renderMyCourses();
+            };
+
+            window.deleteCourse = function(id) {
+                if (confirm('Tem certeza que deseja DELETAR este curso? Esta ação n\u00e3o pode ser desfeita.')) {
+                    DB.deleteCourse(id);
+                    renderMyCourses();
+                }
+            };
+
+            window.openProfileModal = function() {
+                const user = Auth.getCurrentUser();
+                const modalHtml = `
+                    <div class="modal-overlay open" id="profileModal" style="display:flex !important; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
+                        <div class="modal" style="max-width:500px; width:100%; background:var(--dark); border:1px solid var(--border);">
+                            <div class="modal-header" style="border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+                                <h3 class="modal-title">Meu Perfil</h3>
+                                <button class="modal-close" onclick="document.getElementById('profileModal').remove()" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer;">&times;</button>
+                            </div>
+                            <div class="modal-body" style="padding:2rem;">
+                                <form onsubmit="handleUpdateProfile(event)">
+                                    <div style="margin-bottom:1rem;">
+                                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome</label>
+                                        <input type="text" id="pName" value="${user.name}" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text);">
+                                    </div>
+                                    <div style="margin-bottom:1rem;">
+                                        <label style="display:block; margin-bottom:0.5rem; color:var(--gold); font-size:0.9rem;">Especialidade</label>
+                                        <input type="text" id="pSpecialty" value="${user.specialty || ''}" placeholder="Ex: Produtividade & Automação" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--gold);">
+                                    </div>
+                                    <div style="margin-bottom:1rem;">
+                                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Biografia / Descrição</label>
+                                        <textarea id="pBio" rows="4" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text); font-family:inherit;">${user.bio || ''}</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Perfil</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+            };
+
+            window.handleUpdateProfile = function(e) {
+                e.preventDefault();
+                const user = Auth.getCurrentUser();
+                const updates = {
+                    name: document.getElementById('pName').value,
+                    specialty: document.getElementById('pSpecialty').value,
+                    bio: document.getElementById('pBio').value
+                };
+                DB.updateUser(user.id, updates);
+                const session = Auth.getSession();
+                Auth._saveSession({ ...session, ...updates });
+                alert('Perfil atualizado com sucesso!');
+                document.getElementById('profileModal').remove();
+                location.reload();
+            };
+        }
+    </script>
+</body>
+</html>

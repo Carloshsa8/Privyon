@@ -92,10 +92,22 @@
             });
 
             document.getElementById('profStats').innerHTML = `
-                <div class="stat-card"><div class="stat-label">Meus Cursos</div><div class="stat-value">${myCourses.length}</div></div>
-                <div class="stat-card"><div class="stat-label">Total de Alunos</div><div class="stat-value">${totalStudents}</div></div>
-                <div class="stat-card"><div class="stat-label">Receita Gerada</div><div class="stat-value">${formatPrice(totalRevenue)}</div></div>
-                <div class="stat-card"><div class="stat-label">Avaliações</div><div class="stat-value">${totalReviews}</div></div>
+                <a href="cursos.html" class="stat-card" style="text-decoration:none; display:block;">
+                    <div class="stat-label">Meus Cursos</div>
+                    <div class="stat-value">${myCourses.length}</div>
+                </a>
+                <div class="stat-card" style="cursor:pointer;" onclick="openStudentsModal()">
+                    <div class="stat-label">Total de Alunos</div>
+                    <div class="stat-value">${totalStudents}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Receita Gerada</div>
+                    <div class="stat-value">${formatPrice(totalRevenue)}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avaliações</div>
+                    <div class="stat-value">${totalReviews}</div>
+                </div>
             `;
 
             // Courses Grid
@@ -103,18 +115,21 @@
                 const enrolled = DB.getEnrollmentsByCourse(c.id).length;
                 const rating = DB.getCourseRating(c.id);
                 return `
-                    <div class="student-course-card" style="cursor:default;">
+                return `
+                    <a href="cursos.html" class="student-course-card" style="text-decoration:none; display:block; transition: transform 0.2s;">
+                        <style>.student-course-card:hover { transform: translateY(-5px); border-color: var(--gold); }</style>
                         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
                             <div class="course-icon" style="width:40px;height:40px;">${courseImages[c.image]||courseImages.notion}</div>
                             <span class="course-category">${c.category}</span>
                         </div>
-                        <div class="student-course-title">${c.name}</div>
+                        <div class="student-course-title" style="color:var(--text);">${c.name}</div>
                         <div style="display:flex;gap:1.5rem;margin-top:1rem;font-size:0.85rem;color:var(--text-dim);">
                             <span>👤 ${c.students + enrolled} alunos</span>
                             <span style="color:var(--gold);">★ ${rating.avg || c.rating}</span>
                             <span style="color:var(--gold);">${formatPrice(c.price)}</span>
                         </div>
-                    </div>
+                    </a>
+                `;
                 `;
             }).join('') || '<p style="color:var(--text-dim);">Nenhum curso encontrado.</p>';
 
@@ -138,6 +153,53 @@
                 </div>`;
             }).join('') || '<p style="color:var(--text-dim);padding:1rem;">Nenhuma avaliação ainda.</p>';
         }
+
+        window.openStudentsModal = function() {
+            const user = Auth.getCurrentUser();
+            const myCourses = getCoursesByInstructor(user.id);
+            const myCourseIds = myCourses.map(c => c.id);
+            const enrollments = DB.getEnrollments().filter(e => myCourseIds.includes(e.courseId));
+            
+            let rows = enrollments.map(e => {
+                const student = DB.getUserById(e.userId);
+                const course = myCourses.find(c => c.id === e.courseId);
+                return `
+                    <tr>
+                        <td style="color:var(--text); padding: 1rem;">${student ? student.name : 'Aluno'}</td>
+                        <td style="color:var(--text-dim); padding: 1rem;">${course ? course.name : 'Curso'}</td>
+                        <td style="color:var(--gold); padding: 1rem;">${e.progress}%</td>
+                        <td style="color:var(--text-dim); padding: 1rem;">${new Date(e.enrolledAt).toLocaleDateString('pt-BR')}</td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum aluno matriculado ainda via plataforma.</td></tr>';
+
+            const modalHtml = `
+                <div class="modal-overlay open" id="studentsModal" style="display:flex !important; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
+                    <div class="modal" style="max-width:800px; width:100%; background:var(--dark); border:1px solid var(--border);">
+                        <div class="modal-header" style="border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 class="modal-title">Lista de Alunos</h3>
+                            <button class="modal-close" onclick="document.getElementById('studentsModal').remove()" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer;">&times;</button>
+                        </div>
+                        <div class="modal-body" style="padding:2rem;">
+                            <div class="data-table-wrapper">
+                                <table class="data-table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="border-bottom:1px solid var(--border); text-align:left;">
+                                            <th style="padding:1rem;">Aluno</th>
+                                            <th style="padding:1rem;">Curso</th>
+                                            <th style="padding:1rem;">Progresso</th>
+                                            <th style="padding:1rem;">Matrícula</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${rows}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        };
     </script>
 </body>
 </html>

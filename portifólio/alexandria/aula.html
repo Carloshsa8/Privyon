@@ -81,7 +81,10 @@
                                 <div class="lesson-sidebar-title">${course.name}</div>
                                 <a href="meus-cursos.html" class="lesson-sidebar-back">← Voltar aos meus cursos</a>
                                 <div class="progress-bar" style="margin-top:1rem;"><div class="progress-bar-fill" style="width:${enrollment.progress}%"></div></div>
-                                <div class="progress-text">${enrollment.progress}% concluído</div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
+                                    <div class="progress-text">${enrollment.progress}% concluído</div>
+                                    <button class="btn btn-sm" id="btnRateCourse" onclick="openRatingModal()" style="font-size:0.65rem; padding:0.3rem 0.6rem;">Avaliar Curso</button>
+                                </div>
                             </div>
                             ${course.modules.map(mod => `
                                 <div class="lesson-module-group">
@@ -142,6 +145,90 @@
             DB.toggleLessonCompletion(session.userId, courseId, lessonId);
             location.reload();
         }
+
+        /* --- Rating Logic --- */
+        window.openRatingModal = function() {
+            const courseId = new URLSearchParams(window.location.search).get('courseId');
+            const session = Auth.getSession();
+            const existing = DB.getReviewsByCourse(parseInt(courseId)).find(r => r.userId === session.userId);
+            
+            const modalHtml = `
+                <div class="modal-overlay open" id="ratingModal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3 class="modal-title">${existing ? 'Sua Avaliação' : 'Avaliar Curso'}</h3>
+                            <button class="modal-close" onclick="closeRatingModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="text-align:center; margin-bottom:1.5rem;">
+                                <div class="rating-stars" style="font-size:2rem; cursor:pointer; color:var(--text-dim);">
+                                    ${[1,2,3,4,5].map(n => `<span onclick="setRating(${n})" id="star-${n}" class="star">${n <= (existing ? existing.rating : 0) ? '★' : '☆'}</span>`).join('')}
+                                </div>
+                                <input type="hidden" id="ratingValue" value="${existing ? existing.rating : 5}">
+                                <p style="font-size:0.85rem; color:var(--text-dim); margin-top:0.5rem;">(Clique nas estrelas para avaliar)</p>
+                            </div>
+                            <textarea id="ratingComment" placeholder="O que você está achando do curso? (Opcional)" style="width:100%; padding:1rem; background:var(--darker); border:1px solid var(--border); color:var(--text); min-height:100px; font-family:inherit;">${existing ? existing.comment : ''}</textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" onclick="closeRatingModal()">Cancelar</button>
+                            <button class="btn btn-primary" onclick="submitRating()">${existing ? 'Atualizar' : 'Publicar'} Avaliação</button>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .star { transition: color 0.2s; }
+                    .star:hover, .star.active { color: var(--gold); }
+                </style>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            if (existing) setRating(existing.rating);
+            else setRating(5);
+        };
+
+        window.setRating = function(n) {
+            document.getElementById('ratingValue').value = n;
+            for(let i=1; i<=5; i++) {
+                const star = document.getElementById(`star-${i}`);
+                if(i <= n) {
+                    star.textContent = '★';
+                    star.style.color = 'var(--gold)';
+                } else {
+                    star.textContent = '☆';
+                    star.style.color = 'var(--text-dim)';
+                }
+            }
+        };
+
+        window.closeRatingModal = function() {
+            const modal = document.getElementById('ratingModal');
+            if (modal) modal.remove();
+        };
+
+        window.submitRating = function() {
+            const courseId = parseInt(new URLSearchParams(window.location.search).get('courseId'));
+            const session = Auth.getSession();
+            const rating = parseInt(document.getElementById('ratingValue').value);
+            const comment = document.getElementById('ratingComment').value;
+            
+            const reviews = DB.getReviews();
+            const existingIdx = reviews.findIndex(r => r.userId === session.userId && r.courseId === courseId);
+            
+            if (existingIdx !== -1) {
+                reviews[existingIdx] = { ...reviews[existingIdx], rating, comment, date: new Date().toISOString().split('T')[0] };
+                DB._set(DB_KEYS.reviews, reviews);
+            } else {
+                DB.addReview({
+                    userId: session.userId,
+                    courseId: courseId,
+                    rating: rating,
+                    comment: comment
+                });
+            }
+            
+            alert('Avaliação salva com sucesso!');
+            closeRatingModal();
+            location.reload();
+        };
     </script>
 </body>
 </html>

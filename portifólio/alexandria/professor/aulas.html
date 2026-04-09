@@ -206,7 +206,7 @@
             
             const totalMod = course.modules ? course.modules.length : 0;
             const totalLes = course.modules ? course.modules.reduce((s,m)=>s+m.lessons.length,0) : 0;
-            document.getElementById('pageDesc').textContent = `${totalMod} módulos · ${totalLes} aulas`;
+            document.getElementById('pageDesc').textContent = `${totalMod} módulos · ${totalLes} aulas · ${DB.getCourseTotalDuration(course)}`;
 
             renderModules(course);
         }
@@ -341,7 +341,7 @@
             
             // Update total counts in header
             const totalLes = course.modules.reduce((s,m)=>s+m.lessons.length,0);
-            document.getElementById('pageDesc').textContent = `${course.modules.length} módulos · ${totalLes} aulas`;
+            document.getElementById('pageDesc').textContent = `${course.modules.length} módulos · ${totalLes} aulas · ${DB.getCourseTotalDuration(course)}`;
         };
 
         window.handleDeleteLesson = function(modId, lessonId) {

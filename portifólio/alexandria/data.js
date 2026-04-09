@@ -227,31 +227,51 @@ const DB = {
         if (!course || !course.modules) return "0h";
         
         let totalSeconds = 0;
-        let hasLessons = false;
 
-        course.modules.forEach(m => {
-            if (m.lessons) {
-                m.lessons.forEach(l => {
-                    hasLessons = true;
-                    if (l.duration && typeof l.duration === 'string') {
-                        const parts = l.duration.split(':');
-                        if (parts.length === 2) {
-                            totalSeconds += (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
-                        } else if (parts.length === 1) {
-                            totalSeconds += (parseInt(parts[0]) || 0) * 60;
+        try {
+            course.modules.forEach(m => {
+                if (m.lessons && Array.isArray(m.lessons)) {
+                    m.lessons.forEach(l => {
+                        let dur = l.duration;
+                        if (!dur) return;
+
+                        // Case: duration is a number (minutes)
+                        if (typeof dur === 'number') {
+                            totalSeconds += dur * 60;
+                            return;
                         }
-                    }
-                });
-            }
-        });
+
+                        // Case: duration is a string ("14", "14:00", "14.5", "14,5")
+                        if (typeof dur === 'string') {
+                            dur = dur.trim().replace(',', '.');
+                            if (dur.includes(':')) {
+                                const parts = dur.split(':');
+                                const mm = parseInt(parts[0]) || 0;
+                                const ss = parseInt(parts[1]) || 0;
+                                totalSeconds += (mm * 60) + ss;
+                            } else {
+                                const num = parseFloat(dur);
+                                if (!isNaN(num)) totalSeconds += Math.round(num * 60);
+                            }
+                        }
+                    });
+                }
+            });
+        } catch (e) {
+            console.error("Erro ao calcular duracao:", e);
+        }
 
         if (totalSeconds > 0) {
             const h = Math.floor(totalSeconds / 3600);
             const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+            
             if (h > 0) return `${h}h ${m}m`;
-            return `${m}m`;
+            if (m > 0) return `${m}m ${s > 0 ? s + 's' : ''}`.trim();
+            return `${s}s`;
         }
 
+        // Fallback to manual duration (useful for static "32h de conteúdo")
         return course.duration || "0h";
     },
 

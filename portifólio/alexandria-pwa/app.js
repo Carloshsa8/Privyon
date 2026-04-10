@@ -370,7 +370,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker registered', reg))
+                .then(reg => {
+                    console.log('Service Worker registered', reg);
+                    // Check for updates
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed') {
+                                if (navigator.serviceWorker.controller) {
+                                    console.log('New content available; please refresh.');
+                                } else {
+                                    console.log('Content is cached for offline use.');
+                                }
+                            }
+                        };
+                    };
+                })
                 .catch(err => console.error('Service Worker registration failed', err));
         });
     }

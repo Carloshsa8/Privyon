@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alexandria-cache-v3';
+const CACHE_NAME = 'alexandria-cache-v4';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -21,9 +21,7 @@ const ASSETS_TO_CACHE = [
   'courses.js',
   'courses.js?v=2',
   'manifest.json',
-  'icon.svg',
-  'icon-192.png',
-  'icon-512.png'
+  'icon.svg'
 ];
 
 self.addEventListener('install', (event) => {

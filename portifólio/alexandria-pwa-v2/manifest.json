@@ -1,0 +1,19 @@
+{
+  "name": "Alexandria - Plataforma de Conhecimento",
+  "short_name": "Alexandria",
+  "description": "O conhecimento é o único caminho para a evolução.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c9a227",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='64' fill='%230a0a0a'/%3E%3Cpath d='M128 160h256v192H128z' fill='%23c9a227' opacity='0.2'/%3E%3Cpath d='M160 120h192v272H160z' fill='none' stroke='%23c9a227' stroke-width='20'/%3E%3Cpath d='M160 180h192M160 240h192M160 300h192' stroke='%23c9a227' stroke-width='15' stroke-linecap='round'/%3E%3Cpath d='M256 120v272' stroke='%23c9a227' stroke-width='10' opacity='0.5'/%3E%3Ccircle cx='256' cy='256' r='40' fill='%230a0a0a' stroke='%23c9a227' stroke-width='5'/%3E%3Cpath d='M256 230l10 26h26l-20 16 8 26-24-16-24 16 8-26-20-16h26z' fill='%23c9a227'/%3E%3C/svg%3E",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

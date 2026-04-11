@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Aulas - Professor - Alexandria</title>
+    <meta name="description" content="Gerencie aulas na Alexandria - Plataforma de Conhecimento">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Alexandria">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">Alexandria</a>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link">Painel</a>
+                <a href="cursos.html" class="nav-link">Meus Cursos</a>
+                <a href="aulas.html" class="nav-link active">Aulas</a>
+            </nav>
+            <div class="header-right">
+                <div id="authHeaderActions" class="auth-header-actions"></div>
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+                    <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
+        <a href="cursos.html" class="mobile-nav-link">Meus Cursos</a>
+        <a href="aulas.html" class="mobile-nav-link">Aulas</a>
+    </div>
+
+    <div class="dashboard-layout">
+        <aside class="dash-sidebar">
+            <div class="dash-sidebar-header">
+                <div class="dash-sidebar-role">Professor</div>
+                <div class="dash-sidebar-name" id="profName">Professor</div>
+                <button onclick="openProfileModal()" style="background:none; border:none; color:var(--gold); font-size:0.75rem; cursor:pointer; padding:0; margin-top:0.25rem; text-decoration:underline;">Editar Perfil</button>
+            </div>
+            <nav class="dash-sidebar-nav">
+                <a href="dashboard.html" class="dash-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+                <a href="cursos.html" class="dash-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Meus Cursos</a>
+                <a href="aulas.html" class="dash-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>Gerenciar Aulas</a>
+            </nav>
+        </aside>
+
+        <main class="dash-content">
+            <div class="dash-content-header">
+                <h1 class="dash-page-title" id="pageTitle">Gerenciar Aulas</h1>
+                <p class="dash-page-desc" id="pageDesc">Selecione um curso para gerenciar suas aulas</p>
+            </div>
+
+            <!-- Course Selector -->
+            <div id="courseSelector" class="chart-card">
+                <h3 class="chart-title">Selecionar Curso</h3>
+                <div class="student-courses-grid" id="courseSelectorGrid"></div>
+            </div>
+
+            <!-- Module/Lesson Manager -->
+            <div id="lessonManager" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                    <button class="btn btn-sm" onclick="showSelector()" style="background:var(--dark); border:1px solid var(--gray); color:var(--text);">← Voltar aos cursos</button>
+                    <button class="btn btn-sm" style="background:var(--gold); color:var(--darker);" onclick="document.getElementById('moduleModal').classList.add('open')">+ Novo Módulo</button>
+                </div>
+
+                <div id="modulesContainer"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="moduleModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+        <div class="modal-content" style="background:var(--dark); width:90%; max-width:400px; padding:2rem; border-radius:8px; border:1px solid var(--gray);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold); font-size:1.2rem;">Criar Novo Módulo</h2>
+                <button onclick="document.getElementById('moduleModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="moduleForm" onsubmit="handleCreateModule(event)">
+                <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome do Módulo</label>
+                <input type="text" id="mTitle" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px; margin-bottom:1.5rem;">
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Módulo</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="lessonModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+        <div class="modal-content" style="background:var(--dark); width:90%; max-width:600px; padding:2rem; border-radius:8px; border:1px solid var(--gray); max-height: 90vh; overflow-y: auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--gold); font-size:1.2rem;" id="lessonModalTitle">Criar Nova Aula</h2>
+                <button onclick="document.getElementById('lessonModal').classList.remove('open')" style="background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="lessonForm" onsubmit="handleCreateLesson(event)">
+                <input type="hidden" id="lId">
+                <input type="hidden" id="lModuleId">
+                
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Título da Aula</label>
+                    <input type="text" id="lTitle" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Descrição (opcional)</label>
+                    <textarea id="lDesc" rows="3" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px; resize: vertical;"></textarea>
+                </div>
+
+                <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Duração (ex: 15:00)</label>
+                        <input type="text" id="lDuration" required value="10:00" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Status</label>
+                        <select id="lStatus" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                            <option value="published">Publicada</option>
+                            <option value="draft">Rascunho</option>
+                            <option value="scheduled">Agendada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="scheduleContainer" style="margin-bottom:1.5rem; display:none;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Data e Hora da Publicação</label>
+                    <input type="datetime-local" id="lScheduledDate" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--gray); color:var(--text); border-radius:4px;">
+                </div>
+
+                <div style="margin-bottom:1.5rem;">
+                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Tipo (selecione um ou mais)</label>
+                    <div id="lTypeContainer" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; background:var(--darker); padding:0.75rem; border:1px solid var(--gray); border-radius:4px;">
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;"><input type="checkbox" name="lType" value="video"> Vídeo</label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;"><input type="checkbox" name="lType" value="concept"> Conceito</label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;"><input type="checkbox" name="lType" value="practice"> Prática</label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;"><input type="checkbox" name="lType" value="task"> Tarefa</label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;"><input type="checkbox" name="lType" value="exercise"> Exercício</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;" id="lessonSubmitBtn">Salvar Aula</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('lStatus').addEventListener('change', function() {
+            document.getElementById('scheduleContainer').style.display = this.value === 'scheduled' ? 'block' : 'none';
+        });
+    </script>
+    <style> .modal.open { display: flex !important; } </style>
+
+    <script src="../courses.js"></script>
+    <script src="../data.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        if (!Auth.requireAuth(['professor', 'admin'])) {}
+        else {
+            const user = Auth.getCurrentUser();
+            document.getElementById('profName').textContent = user.name;
+
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get('courseId');
+            
+            // If admin, show all courses, if professor show only theirs
+            const myCourses = user.role === 'admin' ? getAllCourses() : getCoursesByInstructor(user.id);
+
+            // Course selector
+            document.getElementById('courseSelectorGrid').innerHTML = myCourses.map(c => `
+                <div class="student-course-card" onclick="selectCourse(${c.id})" style="cursor:pointer;">
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                        <div class="course-icon" style="width:40px;height:40px;">${courseImages[c.image]||courseImages.notion}</div>
+                        <span class="course-category">${c.category}</span>
+                    </div>
+                    <div class="student-course-title">${c.name}</div>
+                    <div style="font-size:0.85rem;color:var(--text-dim);margin-top:0.5rem;">${c.modules ? c.modules.length : 0} módulos · ${c.modules ? c.modules.reduce((s,m)=>s+m.lessons.length,0) : 0} aulas</div>
+                </div>
+            `).join('') || '<p style="color:var(--text-dim);">Nenhum curso encontrado.</p>';
+
+            if (courseId) selectCourse(parseInt(courseId));
+        }
+
+        let expandedModules = new Set();
+
+        function formatDuration(val) {
+            if (!val) return "00:00";
+            val = val.toString().trim().replace(',', '.');
+            if (!val.includes(':')) {
+                const num = parseInt(val);
+                return isNaN(num) ? "00:00" : num.toString().padStart(2, '0') + ":00";
+            }
+            const parts = val.split(':');
+            const m = (parts[0] || '0').padStart(2, '0');
+            const s = (parts[1] || '0').padStart(2, '0');
+            return `${m}:${s.substring(0, 2)}`;
+        }
+
+        function showSelector() {
+            document.getElementById('courseSelector').style.display = '';
+            document.getElementById('lessonManager').style.display = 'none';
+            document.getElementById('pageTitle').textContent = 'Gerenciar Aulas';
+            document.getElementById('pageDesc').textContent = 'Selecione um curso para gerenciar suas aulas';
+        }
+
+        function selectCourse(id) {
+            currentCourseId = id;
+            const course = getCourseById(id);
+            if (!course) return;
+
+            document.getElementById('courseSelector').style.display = 'none';
+            document.getElementById('lessonManager').style.display = '';
+            document.getElementById('pageTitle').textContent = course.name;
+            
+            const totalMod = course.modules ? course.modules.length : 0;
+            const totalLes = course.modules ? course.modules.reduce((s,m)=>s+m.lessons.length,0) : 0;
+            document.getElementById('pageDesc').textContent = `${totalMod} módulos · ${totalLes} aulas · ${DB.getCourseTotalDuration(course)}`;
+
+            renderModules(course);
+        }
+
+        function toggleModule(id) {
+            if (expandedModules.has(id)) expandedModules.delete(id);
+            else expandedModules.add(id);
+            const course = getCourseById(currentCourseId);
+            renderModules(course);
+        }
+
+        function renderModules(course) {
+            const container = document.getElementById('modulesContainer');
+            if (!course.modules || course.modules.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-title">Nenhum módulo criado</div><p class="empty-state-text">Crie módulos e aulas para seu curso.</p></div>';
+                return;
+            }
+            container.innerHTML = course.modules.map((mod, i) => {
+                const isExpanded = expandedModules.has(mod.id);
+                return `
+                <div class="course-module" style="margin-bottom:1.5rem;">
+                    <div class="course-module-header">
+                        <div onclick="toggleModule(${mod.id})" style="flex:1; cursor:pointer;">
+                            <span class="course-module-title">Módulo ${i+1}: ${mod.title}</span>
+                            <span class="course-module-count" style="margin-left: 1rem;">${mod.lessons.length} aulas</span>
+                        </div>
+                        <button class="action-btn" onclick="openLessonModal(${mod.id})" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:0.25rem 0.75rem; border-radius:4px; cursor:pointer;">+ Aula</button>
+                    </div>
+                    <div class="course-module-lessons ${isExpanded ? 'open' : ''}">
+                        ${mod.lessons.map((l, j) => `
+                            <div class="course-lesson" style="justify-content:space-between;">
+                                <div style="display:flex;align-items:center;gap:0.75rem; flex:1;">
+                                    <span style="color:var(--text-dim);font-size:0.8rem;">${j+1}.</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--gold);flex-shrink:0;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    <div style="flex:1;">
+                                        <div style="color:var(--text);">${l.title}</div>
+                                        <div style="font-size:0.75rem;color:var(--text-dim);">${(Array.isArray(l.type) ? l.type : [l.type]).map(t => {
+                                            const labels = { video: 'Vídeo', concept: 'Conceito', practice: 'Prática', task: 'Tarefa', exercise: 'Exercício' };
+                                            return labels[t] || t;
+                                        }).join(', ')} · ${l.duration}</div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:1rem;">
+                                    <span class="badge badge-${l.status === 'draft' ? 'warning' : (l.status === 'scheduled' ? 'info' : 'success')}" style="font-size:0.65rem;">
+                                        ${l.status === 'draft' ? 'Rascunho' : (l.status === 'scheduled' ? 'Agendada' : 'Publicada')}
+                                    </span>
+                                    <div style="display:flex; gap:0.5rem;">
+                                        <button class="action-btn" onclick="openLessonModal(${mod.id}, ${l.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                        <button class="action-btn" onclick="handleDeleteLesson(${mod.id}, ${l.id})" style="background:none; border:none; color:var(--red); cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;}).join('');
+        }
+
+        function openLessonModal(moduleId, lessonId = null) {
+            document.getElementById('lModuleId').value = moduleId;
+            document.getElementById('lId').value = lessonId || '';
+            
+            const form = document.getElementById('lessonForm');
+            form.reset();
+            
+            if (lessonId) {
+                const course = getCourseById(currentCourseId);
+                const mod = course.modules.find(m => m.id === moduleId);
+                const lesson = mod.lessons.find(l => l.id === lessonId);
+                
+                document.getElementById('lessonModalTitle').textContent = 'Editar Aula';
+                document.getElementById('lTitle').value = lesson.title;
+                document.getElementById('lDesc').value = lesson.description || '';
+                document.getElementById('lDuration').value = lesson.duration;
+                document.getElementById('lStatus').value = lesson.status || 'published';
+                document.getElementById('lScheduledDate').value = lesson.scheduledDate || '';
+                document.getElementById('scheduleContainer').style.display = lesson.status === 'scheduled' ? 'block' : 'none';
+                
+                const types = Array.isArray(lesson.type) ? lesson.type : [lesson.type];
+                document.querySelectorAll('input[name="lType"]').forEach(cb => {
+                    cb.checked = types.includes(cb.value);
+                });
+            } else {
+                document.getElementById('lessonModalTitle').textContent = 'Criar Nova Aula';
+                document.getElementById('scheduleContainer').style.display = 'none';
+            }
+            
+            document.getElementById('lessonModal').classList.add('open');
+        }
+
+        window.handleCreateModule = function(e) {
+            e.preventDefault();
+            if(!currentCourseId) return;
+            const title = document.getElementById('mTitle').value;
+            DB.addModuleToCourse(currentCourseId, title);
+            document.getElementById('moduleModal').classList.remove('open');
+            e.target.reset();
+            selectCourse(currentCourseId);
+        };
+
+        window.handleCreateLesson = function(e) {
+            e.preventDefault();
+            if(!currentCourseId) return;
+            const modId = parseInt(document.getElementById('lModuleId').value);
+            const lessonId = document.getElementById('lId').value;
+            
+            const data = {
+                title: document.getElementById('lTitle').value,
+                description: document.getElementById('lDesc').value,
+                duration: formatDuration(document.getElementById('lDuration').value),
+                status: document.getElementById('lStatus').value,
+                scheduledDate: document.getElementById('lScheduledDate').value,
+                type: Array.from(document.querySelectorAll('input[name="lType"]:checked')).map(cb => cb.value)
+            };
+
+            console.log('Salvando aula:', data);
+
+            if (lessonId) {
+                const updated = DB.updateLesson(currentCourseId, modId, parseInt(lessonId), data);
+                console.log('Aula atualizada:', updated);
+            } else {
+                const added = DB.addLessonToModule(currentCourseId, modId, data);
+                console.log('Aula adicionada:', added);
+            }
+            
+            document.getElementById('lessonModal').classList.remove('open');
+            e.target.reset();
+            
+            // Refresh the course view
+            const course = getCourseById(currentCourseId);
+            renderModules(course);
+            
+            // Update total counts in header
+            const totalLes = course.modules.reduce((s,m)=>s+m.lessons.length,0);
+            document.getElementById('pageDesc').textContent = `${course.modules.length} módulos · ${totalLes} aulas · ${DB.getCourseTotalDuration(course)}`;
+        };
+
+        window.handleDeleteLesson = function(modId, lessonId) {
+            if (confirm('Tem certeza que deseja excluir esta aula?')) {
+                DB.deleteLesson(currentCourseId, modId, lessonId);
+                selectCourse(currentCourseId);
+            }
+        };
+
+        window.openProfileModal = function() {
+            const user = Auth.getCurrentUser();
+            const modalHtml = `
+                <div class="modal-overlay open" id="profileModal" style="display:flex !important; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:2rem;">
+                    <div class="modal" style="max-width:500px; width:100%; background:var(--dark); border:1px solid var(--border);">
+                        <div class="modal-header" style="border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 class="modal-title">Meu Perfil</h3>
+                            <button class="modal-close" onclick="document.getElementById('profileModal').remove()" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer;">&times;</button>
+                        </div>
+                        <div class="modal-body" style="padding:2rem;">
+                            <form onsubmit="handleUpdateProfile(event)">
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Nome</label>
+                                    <input type="text" id="pName" value="${user.name}" required style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text);">
+                                </div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--gold); font-size:0.9rem;">Especialidade</label>
+                                    <input type="text" id="pSpecialty" value="${user.specialty || ''}" placeholder="Ex: Produtividade & Automação" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--gold);">
+                                </div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; margin-bottom:0.5rem; color:var(--text-dim); font-size:0.9rem;">Biografia / Descrição</label>
+                                    <textarea id="pBio" rows="4" style="width:100%; padding:0.75rem; background:var(--darker); border:1px solid var(--border); color:var(--text); font-family:inherit;">${user.bio || ''}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar Perfil</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        };
+
+        window.handleUpdateProfile = function(e) {
+            e.preventDefault();
+            const user = Auth.getCurrentUser();
+            const updates = {
+                name: document.getElementById('pName').value,
+                specialty: document.getElementById('pSpecialty').value,
+                bio: document.getElementById('pBio').value
+            };
+            DB.updateUser(user.id, updates);
+            const session = Auth.getSession();
+            Auth._saveSession({ ...session, ...updates });
+            alert('Perfil atualizado com sucesso!');
+            document.getElementById('profileModal').remove();
+            location.reload();
+        };
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../sw.js')
+                    .then(reg => console.log('SW registered:', reg))
+                    .catch(err => console.error('SW registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

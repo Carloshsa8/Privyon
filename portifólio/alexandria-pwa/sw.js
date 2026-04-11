@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alexandria-cache-v2';
+const CACHE_NAME = 'alexandria-cache-v3';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -21,13 +21,18 @@ const ASSETS_TO_CACHE = [
   'courses.js',
   'courses.js?v=2',
   'manifest.json',
-  'icon.svg'
+  'icon.svg',
+  'icon-192.png',
+  'icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      // Use addAll but carefully; if one fails, it might fail the whole install
+      return cache.addAll(ASSETS_TO_CACHE).catch(err => {
+        console.warn('Some assets failed to cache during install, continuing anyway...', err);
+      });
     })
   );
   self.skipWaiting();
@@ -49,24 +54,18 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Navigation fallback to index.html for root or unknown paths
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        return caches.match('index.html');
+        return caches.match('index.html') || caches.match('./') || caches.match('./index.html');
       })
     );
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then(fetchRes => {
-        // Optionally cache new successful requests
-        return fetchRes;
-      });
-    }).catch(() => {
-      // Offline fallback for assets if needed
+    caches.match(event.request, { ignoreSearch: true }).then((response) => {
+      return response || fetch(event.request);
     })
   );
 });

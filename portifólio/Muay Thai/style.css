@@ -34,7 +34,11 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4, .impact-text {
+h1,
+h2,
+h3,
+h4,
+.impact-text {
     font-family: 'Bebas Neue', cursive;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -71,7 +75,7 @@ nav.scrolled {
     background: rgba(10, 10, 10, 0.92);
     backdrop-filter: blur(12px);
     padding: 14px 50px;
-    border-bottom: 1px solid rgba(204,0,0,0.15);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.15);
 }
 
 .logo {
@@ -134,9 +138,11 @@ nav.scrolled {
 .hamburger.active span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
+
 .hamburger.active span:nth-child(2) {
     opacity: 0;
 }
+
 .hamburger.active span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
 }
@@ -146,14 +152,16 @@ nav.scrolled {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 900;
     opacity: 0;
     transition: opacity 0.3s;
+    pointer-events: none;
 }
 
 .mobile-overlay.show {
     opacity: 1;
+    pointer-events: auto;
 }
 
 /* ===========================
@@ -169,7 +177,9 @@ nav.scrolled {
     text-align: center;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(circle at center, #1a0505 0%, #0a0a0a 100%);
+    background:
+        linear-gradient(to bottom, rgba(10, 10, 10, 0.7) 0%, rgba(10, 10, 10, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=1920&q=80') center/cover no-repeat;
 }
 
 #hero-canvas {
@@ -329,7 +339,7 @@ section {
     font-family: 'Bebas Neue', cursive;
     letter-spacing: 2px;
     font-size: 1rem;
-    box-shadow: 0 8px 25px rgba(204,0,0,0.5);
+    box-shadow: 0 8px 25px rgba(204, 0, 0, 0.5);
 }
 
 .about-text h3 {
@@ -400,8 +410,8 @@ section {
 
 .equipe-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(204,0,0,0.4);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    border-color: rgba(204, 0, 0, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
 .equipe-img {
@@ -429,7 +439,7 @@ section {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(204,0,0,0.9));
+    background: linear-gradient(transparent, rgba(204, 0, 0, 0.9));
     padding: 40px 20px 14px;
     color: white;
     font-family: 'Bebas Neue', cursive;
@@ -478,7 +488,7 @@ section {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.92);
+    background: rgba(0, 0, 0, 0.92);
     z-index: 9999;
     align-items: center;
     justify-content: center;
@@ -506,6 +516,7 @@ section {
         opacity: 0;
         transform: scale(0.92) translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -516,7 +527,7 @@ section {
     position: absolute;
     top: 14px;
     right: 14px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid #333;
     color: white;
     width: 36px;
@@ -627,7 +638,7 @@ section {
 
 .modal-socials a:hover {
     border-color: var(--primary);
-    background: rgba(204,0,0,0.1);
+    background: rgba(204, 0, 0, 0.1);
 }
 
 /* ===========================
@@ -729,7 +740,7 @@ section {
 .gallery-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(transparent 40%, rgba(204,0,0,0.8));
+    background: linear-gradient(transparent 40%, rgba(204, 0, 0, 0.8));
     display: flex;
     align-items: flex-end;
     padding: 16px;
@@ -963,7 +974,7 @@ footer {
 .footer-socials a:hover {
     color: var(--text-light);
     border-color: var(--primary);
-    background: rgba(204,0,0,0.08);
+    background: rgba(204, 0, 0, 0.08);
 }
 
 .footer-info p {
@@ -1051,7 +1062,7 @@ footer {
 }
 
 .gallery-page-item .gallery-overlay {
-    background: linear-gradient(transparent 50%, rgba(0,0,0,0.7));
+    background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.7));
 }
 
 /* ===========================
@@ -1061,24 +1072,30 @@ footer {
     nav {
         padding: 18px 30px;
     }
+
     nav.scrolled {
         padding: 14px 30px;
     }
+
     .nav-links {
         gap: 20px;
     }
+
     .nav-links a {
         font-size: 0.75rem;
     }
+
     .gallery-grid {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
     }
+
     .gallery-featured {
         grid-column: span 2;
         grid-row: span 1;
         height: 300px;
     }
+
     .gallery-item:nth-child(2),
     .gallery-item:nth-child(3),
     .gallery-item:nth-child(4),
@@ -1089,10 +1106,12 @@ footer {
 }
 
 @media (max-width: 900px) {
+
     /* Show hamburger */
     .hamburger {
         display: flex;
     }
+
     .mobile-overlay {
         display: block;
     }
@@ -1154,6 +1173,7 @@ footer {
     nav {
         padding: 16px 20px;
     }
+
     nav.scrolled {
         padding: 12px 20px;
     }
@@ -1175,11 +1195,13 @@ footer {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
+
     .gallery-featured {
         grid-column: auto;
         grid-row: auto;
         height: 250px;
     }
+
     .gallery-item:nth-child(n) {
         grid-column: auto;
         height: 200px;

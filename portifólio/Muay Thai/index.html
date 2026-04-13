@@ -39,7 +39,7 @@
         <div class="hero-content">
             <h1 class="reveal">Patrick Padovani</h1>
             <p class="reveal">Multicampeão de Muay Thai</p>
-            <a href="#about" class="btn reveal">Conheca o Professor</a>
+            <a href="#about" class="btn reveal">Conheça o Professor</a>
         </div>
     </section>
 
@@ -48,7 +48,7 @@
         <h2 class="section-title reveal">Quem Sou Eu</h2>
         <div class="about-grid">
             <div class="about-img reveal">
-                <img src="patrick.png" alt="Patrick Padovani — Multicampeão de Muay Thai">
+                <img src="patrick_fight.jpg" alt="Patrick Padovani em luta no Portuários Stadium">
                 <div class="about-img-badge">
                     <i class="fa-solid fa-trophy"></i>
                     <span>Duplo Campeão</span>
@@ -88,40 +88,82 @@
         <h2 class="section-title reveal">Nossa Equipe</h2>
         <p class="section-subtitle reveal">Conheça os profissionais que fazem o CT Padovani ser referência</p>
         <div class="equipe-grid">
-            <div class="equipe-card reveal">
+            <!-- Patrick Card -->
+            <div class="equipe-card reveal" onclick="openModal('modal-patrick')">
                 <div class="equipe-img">
-                    <img src="patrick.png" alt="Patrick Padovani">
-                    <div class="equipe-social">
-                        <a href="https://www.instagram.com/patrick_padovani/" target="_blank" rel="noopener">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </div>
+                    <img src="patrick_fight.jpg" alt="Patrick Padovani">
+                    <div class="equipe-badge"><i class="fa-solid fa-plus"></i> Ver mais</div>
                 </div>
                 <div class="equipe-info">
                     <h3>Patrick Padovani</h3>
                     <span class="equipe-role">Head Coach &amp; Atleta Profissional</span>
-                    <p>Duplo campeão no Portuários Stadium. Especialista em Muay Thai tradicional e técnica de alto nível.</p>
+                    <p>Duplo campeão no Portuários Stadium. Técnica de elite e método campeão.</p>
                 </div>
             </div>
-            <div class="equipe-card reveal" style="transition-delay: 0.15s;">
-                <div class="equipe-img equipe-img-placeholder">
-                    <div class="placeholder-icon">
-                        <i class="fa-solid fa-dumbbell"></i>
-                    </div>
-                    <div class="equipe-social">
-                        <a href="https://www.instagram.com/ct_padovani/" target="_blank" rel="noopener">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </div>
+            <!-- CT Card -->
+            <div class="equipe-card reveal" style="transition-delay: 0.15s;" onclick="openModal('modal-ct')">
+                <div class="equipe-img">
+                    <img src="gallery1.png" alt="CT Padovani — Centro de Treinamento">
+                    <div class="equipe-badge"><i class="fa-solid fa-plus"></i> Ver mais</div>
                 </div>
                 <div class="equipe-info">
                     <h3>CT Padovani</h3>
                     <span class="equipe-role">Centro de Treinamento</span>
-                    <p>Equipe completa de professores e preparadores físicos para todas as modalidades e níveis.</p>
+                    <p>Equipe completa de professores e preparadores para todas as modalidades e níveis.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal Patrick -->
+    <div class="modal-overlay" id="modal-patrick" onclick="closeModal(event, 'modal-patrick')">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal(null, 'modal-patrick')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-img">
+                <img src="patrick_fight.jpg" alt="Patrick Padovani">
+            </div>
+            <div class="modal-body">
+                <h2>Patrick Padovani</h2>
+                <span class="modal-role">Head Coach &amp; Atleta Profissional</span>
+                <div class="modal-stats">
+                    <div class="modal-stat"><strong>2x</strong> Campeão Portuários Stadium</div>
+                    <div class="modal-stat"><strong>52kg &amp; 55kg</strong> Cinturões Conquistados</div>
+                    <div class="modal-stat"><strong>RWS</strong> Rajadamnern World Series (Tailândia)</div>
+                    <div class="modal-stat"><strong>Rio Preto</strong> São José do Rio Preto — SP</div>
+                </div>
+                <p>Primeiro duplo campeão masculino da história do Portuários Stadium. Atleta profissional com vasta experiência internacional, incluindo passagem pelo Rajadamnern World Series (RWS) na Tailândia.</p>
+                <p>Especialista em Muay Thai tradicional com ênfase em técnica refinada, clinch e uso de cotovelo. Dedica sua vida a formar novos talentos e proporcionar treinos de alta performance.</p>
+                <div class="modal-socials">
+                    <a href="https://www.instagram.com/patrick_padovani/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> @patrick_padovani</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal CT -->
+    <div class="modal-overlay" id="modal-ct" onclick="closeModal(event, 'modal-ct')">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal(null, 'modal-ct')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-img">
+                <img src="gallery1.png" alt="CT Padovani">
+            </div>
+            <div class="modal-body">
+                <h2>CT Padovani</h2>
+                <span class="modal-role">Centro de Treinamento</span>
+                <div class="modal-stats">
+                    <div class="modal-stat"><strong>3</strong> Modalidades Disponíveis</div>
+                    <div class="modal-stat"><strong>Todos</strong> os Níveis de Experiência</div>
+                    <div class="modal-stat"><strong>Personal</strong> Treinos Individualizados</div>
+                    <div class="modal-stat"><strong>Rio Preto</strong> São José do Rio Preto — SP</div>
+                </div>
+                <p>O CT Padovani é referência em Muay Thai, Submission e Personal Fight na região de São José do Rio Preto. Com metodologia desenvolvida por um atleta de ponta, o centro de treinamento oferece aulas para todos os níveis.</p>
+                <p>Ambiente focado em disciplina, respeito e superação. Estrutura completa com ringue, sacos de pancada, e equipamentos profissionais para formação de atletas e praticantes recreativos.</p>
+                <div class="modal-socials">
+                    <a href="https://www.instagram.com/ct_padovani/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> @ct_padovani</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modalities Section -->
     <section id="modalidades" class="modalidades">
@@ -151,9 +193,9 @@
         <p class="section-subtitle reveal">Momentos dentro e fora do ringue</p>
         <div class="gallery-grid reveal">
             <div class="gallery-item gallery-featured">
-                <img src="gallery3.png" alt="Patrick Padovani — Campeão">
+                <img src="patrick_fight.jpg" alt="Patrick Padovani em ação no Portuários Stadium">
                 <div class="gallery-overlay">
-                    <span>Conquista do Cinturão</span>
+                    <span>Portuários Stadium</span>
                 </div>
             </div>
             <div class="gallery-item">
@@ -175,7 +217,7 @@
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="gallery5.png" alt="Treinamento nas Pad">
+                <img src="gallery5.png" alt="Treinamento nas Pads">
                 <div class="gallery-overlay">
                     <span>Treino nas Pads</span>
                 </div>
@@ -242,19 +284,6 @@
         </div>
     </footer>
 
-    <button class="back-to-top" id="backToTop"><i class="fa-solid fa-arrow-up"></i></button>
-
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" id="lightboxClose">&times;</button>
-        <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fa-solid fa-chevron-right"></i></button>
-        <div class="lightbox-content">
-            <img src="" alt="Galeria" id="lightboxImg">
-        </div>
-        <div class="lightbox-counter" id="lightboxCounter"></div>
-    </div>
-
     <!-- JS Dependencies -->
     <script src="script.js"></script>
     <script>
@@ -268,13 +297,31 @@
         }
 
         function closeMobileMenu() {
-            const navLinks = document.getElementById('nav-links');
-            const overlay = document.getElementById('mobile-overlay');
-            const hamburger = document.getElementById('hamburger');
-            navLinks.classList.remove('open');
-            overlay.classList.remove('show');
-            hamburger.classList.remove('active');
+            document.getElementById('nav-links').classList.remove('open');
+            document.getElementById('mobile-overlay').classList.remove('show');
+            document.getElementById('hamburger').classList.remove('active');
         }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e, id) {
+            if (!e || e.target === document.getElementById(id)) {
+                document.getElementById(id).classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => {
+                    m.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+        });
     </script>
 </body>
 </html>

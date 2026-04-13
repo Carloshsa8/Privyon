@@ -939,14 +939,14 @@ section {
    FOOTER
    =========================== */
 footer {
-    padding: 50px 10%;
+    padding: 100px 10% 60px;
     background: #000;
     text-align: center;
     border-top: 1px solid #1a0505;
 }
 
 .footer-logo {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     display: flex;
     justify-content: center;
 }

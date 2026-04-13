@@ -178,6 +178,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('lightboxNext').addEventListener('click', nextImage);
         document.getElementById('lightboxPrev').addEventListener('click', prevImage);
 
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextImage();
+            if (touchEndX - touchStartX > 50) prevImage();
+        }, { passive: true });
+
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox) closeLightbox();
         });

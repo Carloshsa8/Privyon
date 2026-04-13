@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria | CT Padovani — Muay Thai</title>
+    <meta name="description" content="Galeria de fotos do CT Padovani e do atleta Patrick Padovani. Momentos de treino, competições e conquistas.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border: 2px solid #1a0505;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover {
+            color: var(--primary);
+        }
+        .gallery-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: color 0.2s;
+            margin-bottom: 20px;
+        }
+        .gallery-back:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="index.html" class="logo">PADOVANI<span>.</span></a>
+        <div class="nav-links" id="nav-links">
+            <a href="index.html#about" onclick="closeMobileMenu()">Quem Sou</a>
+            <a href="index.html#equipe" onclick="closeMobileMenu()">Nossa Equipe</a>
+            <a href="index.html#modalidades" onclick="closeMobileMenu()">Modalidades</a>
+            <a href="gallery.html" onclick="closeMobileMenu()">Galeria</a>
+            <a href="index.html#diferenciais" onclick="closeMobileMenu()">Diferenciais</a>
+            <a href="index.html#contato" onclick="closeMobileMenu()">Contato</a>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menu" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Gallery Header -->
+    <div class="gallery-page-header">
+        <a href="index.html" class="gallery-back"><i class="fa-solid fa-arrow-left"></i> Voltar ao início</a>
+        <h1 class="section-title">Galeria de <span style="color: var(--primary);">Fotos</span></h1>
+        <p class="section-subtitle">Momentos dentro e fora do ringue — treinos, competições e conquistas</p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-page-grid">
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="gallery3.png" alt="Patrick Padovani — Conquista do Cinturão">
+            <div class="gallery-overlay"><span>Conquista do Cinturão</span></div>
+        </div>
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="gallery1.png" alt="Treino em grupo no CT Padovani">
+            <div class="gallery-overlay"><span>Treino em Grupo</span></div>
+        </div>
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="gallery4.png" alt="Técnica de Muay Thai">
+            <div class="gallery-overlay"><span>Alta Técnica</span></div>
+        </div>
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="gallery2.png" alt="Noite de Campeonato">
+            <div class="gallery-overlay"><span>Noite de Campeonato</span></div>
+        </div>
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="gallery5.png" alt="Treino nas Pads">
+            <div class="gallery-overlay"><span>Treino nas Pads</span></div>
+        </div>
+        <div class="gallery-page-item" onclick="openLightbox(this)">
+            <img src="patrick.png" alt="Patrick Padovani">
+            <div class="gallery-overlay"><span>Patrick Padovani</span></div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/patrick_padovani/" target="_blank" rel="noopener" title="Instagram Patrick Padovani">
+                <i class="fa-brands fa-instagram"></i>
+                <span>@patrick_padovani</span>
+            </a>
+            <a href="https://www.instagram.com/ct_padovani/" target="_blank" rel="noopener" title="Instagram CT Padovani">
+                <i class="fa-brands fa-instagram"></i>
+                <span>@ct_padovani</span>
+            </a>
+        </div>
+        <div class="footer-info">
+            <p>&copy; 2024 CT Padovani. São José do Rio Preto - SP.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            const overlay = document.getElementById('mobile-overlay');
+            const hamburger = document.getElementById('hamburger');
+            navLinks.classList.toggle('open');
+            overlay.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('nav-links').classList.remove('open');
+            document.getElementById('mobile-overlay').classList.remove('show');
+            document.getElementById('hamburger').classList.remove('active');
+        }
+
+        function openLightbox(el) {
+            const img = el.querySelector('img');
+            document.getElementById('lightbox-img').src = img.src;
+            document.getElementById('lightbox-img').alt = img.alt;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (!e || e.target !== document.getElementById('lightbox-img')) {
+                document.getElementById('lightbox').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>

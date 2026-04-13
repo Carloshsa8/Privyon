@@ -13,15 +13,25 @@
 <body>
 
     <!-- Navigation -->
-    <nav>
+    <nav id="navbar">
         <a href="#" class="logo">PADOVANI<span>.</span></a>
-        <div class="nav-links">
-            <a href="#about">Quem Sou</a>
-            <a href="#modalidades">Modalidades</a>
-            <a href="#diferenciais">Diferenciais</a>
-            <a href="#contato">Contato</a>
+        <div class="nav-links" id="nav-links">
+            <a href="#about" onclick="closeMobileMenu()">Quem Sou</a>
+            <a href="#equipe" onclick="closeMobileMenu()">Nossa Equipe</a>
+            <a href="#modalidades" onclick="closeMobileMenu()">Modalidades</a>
+            <a href="#galeria" onclick="closeMobileMenu()">Galeria</a>
+            <a href="#diferenciais" onclick="closeMobileMenu()">Diferenciais</a>
+            <a href="#contato" onclick="closeMobileMenu()">Contato</a>
         </div>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menu" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobile-overlay" onclick="closeMobileMenu()"></div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -29,7 +39,7 @@
         <div class="hero-content">
             <h1 class="reveal">Patrick Padovani</h1>
             <p class="reveal">Multicampeão de Muay Thai</p>
-            <a href="#about" class="btn reveal">Conheça o Professor</a>
+            <a href="#about" class="btn reveal">Conheca o Professor</a>
         </div>
     </section>
 
@@ -38,11 +48,14 @@
         <h2 class="section-title reveal">Quem Sou Eu</h2>
         <div class="about-grid">
             <div class="about-img reveal">
-                <!-- Using a placeholder but with styled border as requested -->
-                <img src="https://images.unsplash.com/photo-1599058917232-d750c18590e6?q=80&w=1000&auto=format&fit=crop" alt="Patrick Padovani">
+                <img src="patrick.png" alt="Patrick Padovani — Multicampeão de Muay Thai">
+                <div class="about-img-badge">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Duplo Campeão</span>
+                </div>
             </div>
             <div class="about-text reveal">
-                <h3>Treinador & Atleta Profissional</h3>
+                <h3>Treinador &amp; Atleta Profissional</h3>
                 <p>
                     Referência no Muay Thai nacional, Patrick Padovani é sinônimo de técnica e resiliência. Atleta profissional com vasta experiência internacional, Patrick fez história ao se tornar o <strong>primeiro duplo campeão masculino</strong> da história do prestigiado Portuários Stadium, conquistando os cinturões das categorias 52kg e 55kg.
                 </p>
@@ -52,6 +65,60 @@
                 <p>
                     Natural de São José do Rio Preto, dedica sua vida a formar novos talentos e proporcionar treinos de alta performance para todos os níveis.
                 </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-number">2x</span>
+                        <span class="stat-label">Campeão</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">+10</span>
+                        <span class="stat-label">Anos de Carreira</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">🌍</span>
+                        <span class="stat-label">Experiência Internacional</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossa Equipe Section -->
+    <section id="equipe" class="equipe">
+        <h2 class="section-title reveal">Nossa Equipe</h2>
+        <p class="section-subtitle reveal">Conheça os profissionais que fazem o CT Padovani ser referência</p>
+        <div class="equipe-grid">
+            <div class="equipe-card reveal">
+                <div class="equipe-img">
+                    <img src="patrick.png" alt="Patrick Padovani">
+                    <div class="equipe-social">
+                        <a href="https://www.instagram.com/patrick_padovani/" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="equipe-info">
+                    <h3>Patrick Padovani</h3>
+                    <span class="equipe-role">Head Coach &amp; Atleta Profissional</span>
+                    <p>Duplo campeão no Portuários Stadium. Especialista em Muay Thai tradicional e técnica de alto nível.</p>
+                </div>
+            </div>
+            <div class="equipe-card reveal" style="transition-delay: 0.15s;">
+                <div class="equipe-img equipe-img-placeholder">
+                    <div class="placeholder-icon">
+                        <i class="fa-solid fa-dumbbell"></i>
+                    </div>
+                    <div class="equipe-social">
+                        <a href="https://www.instagram.com/ct_padovani/" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="equipe-info">
+                    <h3>CT Padovani</h3>
+                    <span class="equipe-role">Centro de Treinamento</span>
+                    <p>Equipe completa de professores e preparadores físicos para todas as modalidades e níveis.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -66,15 +133,56 @@
                 <p>Aulas dinâmicas que ensinam técnica refinada, defesa pessoal e condicionamento extremo com a arte tradicional tailandesa.</p>
             </div>
             <div class="card reveal" style="transition-delay: 0.2s;">
-                <i class="fa-solid fa-person-skiing-nordic"></i> <!-- Best available for NoGi style -->
+                <i class="fa-solid fa-circle-nodes"></i>
                 <h3>Submission</h3>
-                <p>Foco no combate no solo, controle e finalizações, essencial para quem busca um jogo completo de luta agarrada sem kimono.</p>
+                <p>Foco no combate no solo, controle e finalizações. Essencial para quem busca um jogo completo de luta agarrada sem kimono.</p>
             </div>
             <div class="card reveal" style="transition-delay: 0.3s;">
                 <i class="fa-solid fa-bolt"></i>
                 <h3>Personal Fight</h3>
                 <p>Treinamento individualizado com foco total nos seus objetivos, seja técnica avançada, perda de peso ou performance.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Galeria Section -->
+    <section id="galeria" class="galeria">
+        <h2 class="section-title reveal">Galeria</h2>
+        <p class="section-subtitle reveal">Momentos dentro e fora do ringue</p>
+        <div class="gallery-grid reveal">
+            <div class="gallery-item gallery-featured">
+                <img src="gallery3.png" alt="Patrick Padovani — Campeão">
+                <div class="gallery-overlay">
+                    <span>Conquista do Cinturão</span>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="gallery1.png" alt="Treino CT Padovani">
+                <div class="gallery-overlay">
+                    <span>Treino em Grupo</span>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="gallery4.png" alt="Técnica Muay Thai">
+                <div class="gallery-overlay">
+                    <span>Alta Técnica</span>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="gallery2.png" alt="Noite de Luta">
+                <div class="gallery-overlay">
+                    <span>Noite de Campeonato</span>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="gallery5.png" alt="Treinamento nas Pad">
+                <div class="gallery-overlay">
+                    <span>Treino nas Pads</span>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-cta reveal">
+            <a href="gallery.html" class="btn-outline">Ver Galeria Completa <i class="fa-solid fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -111,23 +219,49 @@
             <h2 class="reveal">Pronto para o próximo nível?</h2>
             <p class="reveal">Venha treinar com um multicampeão em São José do Rio Preto.</p>
             <br>
-            <a href="https://wa.me/55XXXXXXXXXXX" target="_blank" class="btn reveal">Chamar no WhatsApp</a>
+            <a href="https://wa.me/5517999999999" target="_blank" rel="noopener" class="btn reveal">
+                <i class="fa-brands fa-whatsapp"></i> Chamar no WhatsApp
+            </a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
         <div class="footer-socials">
-            <a href="https://www.instagram.com/patrick_padovani/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.instagram.com/ct_padovani/" target="_blank"><i class="fa-brands fa-instagram"></i> CT</a>
+            <a href="https://www.instagram.com/patrick_padovani/" target="_blank" rel="noopener" title="Instagram Patrick Padovani">
+                <i class="fa-brands fa-instagram"></i>
+                <span>@patrick_padovani</span>
+            </a>
+            <a href="https://www.instagram.com/ct_padovani/" target="_blank" rel="noopener" title="Instagram CT Padovani">
+                <i class="fa-brands fa-instagram"></i>
+                <span>@ct_padovani</span>
+            </a>
         </div>
         <div class="footer-info">
             <p>&copy; 2024 CT Padovani. São José do Rio Preto - SP.</p>
-            <p>Design Premium by Antigravity AI.</p>
         </div>
     </footer>
 
     <!-- JS Dependencies -->
     <script src="script.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            const overlay = document.getElementById('mobile-overlay');
+            const hamburger = document.getElementById('hamburger');
+            navLinks.classList.toggle('open');
+            overlay.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            const overlay = document.getElementById('mobile-overlay');
+            const hamburger = document.getElementById('hamburger');
+            navLinks.classList.remove('open');
+            overlay.classList.remove('show');
+            hamburger.classList.remove('active');
+        }
+    </script>
 </body>
 </html>

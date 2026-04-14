@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --light-accent: 0 168 84;
+    --dark-accent: 0 210 106;
+    --accent-hex: #00D26A;
+    --accent-rgb: 0 210 106;
+  }
+
+  body {
+    @apply bg-light-bg text-light-primary dark:bg-dark-bg dark:text-dark-primary antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white dark:bg-dark-card rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_30px_-10px_rgba(0,0,0,0.5)] border border-gray-100/50 dark:border-gray-800/50 p-4 lg:p-6 transition-all duration-300;
+  }
+  
+  .fab {
+    background-color: var(--accent-hex) !important;
+    color: white !important;
+    @apply fixed bottom-24 right-6 w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 z-40 lg:hidden border-2 border-white/20;
+    box-shadow: 0 10px 25px -5px rgb(var(--accent-rgb) / 0.4);
+  }
+  
+  .glass {
+    @apply bg-white/70 dark:bg-[#161B22]/70 backdrop-blur-md border border-white/20 dark:border-white/5;
+  }
+
+  .btn-primary {
+    background-color: var(--accent-hex) !important;
+    color: white !important;
+    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
+    box-shadow: 0 4px 14px 0 rgb(var(--accent-rgb) / 0.3);
+  }
+
+  .btn-primary:hover {
+    @apply scale-[1.02];
+    filter: brightness(1.1);
+  }
+
+  .btn-primary:active {
+    @apply scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full bg-gray-50/50 dark:bg-[#0D1117]/50 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-2.5 text-light-primary dark:text-dark-primary focus:outline-none focus:ring-2 focus:ring-light-accent dark:focus:ring-dark-accent focus:border-transparent transition-all duration-200;
+  }
+
+  .nav-item-active {
+    background-color: rgb(var(--accent-rgb) / 0.1) !important;
+    color: var(--accent-hex) !important;
+    @apply font-semibold;
+    box-shadow: 0 0 15px -3px rgb(var(--accent-rgb) / 0.2);
+  }
+}
+
+/* Custom Scrollbar for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0D1117; 
+}
+ 
+.dark ::-webkit-scrollbar-thumb {
+  background: #30363d; 
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #8b949e; 
+}
+
+/* Glass table row effect */
+.table-row-hover {
+  @apply hover:bg-light-accent/5 dark:hover:bg-dark-accent/5 transition-colors cursor-pointer;
+}
+
+/* Theme Transition Effect - Circle Reveal */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Ensure the new screen is always on top during the transition */
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+/* Base transition for older browsers */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* Custom view transition animation */
+@keyframes reveal-item {
+  from {
+    clip-path: circle(0% at 90% 5%);
+  }
+  to {
+    clip-path: circle(150% at 90% 5%);
+  }
+}
+
+::view-transition-new(root) {
+  animation: 700ms cubic-bezier(0.4, 0, 0.2, 1) both reveal-item;
+}
+
+

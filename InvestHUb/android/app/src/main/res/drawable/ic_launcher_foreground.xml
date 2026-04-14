@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    
+    <!-- Top Left Corner Segment -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M50,15 H25 C19.48,15 15,19.48 15,25 V50" />
+    
+    <!-- Bottom Left Corner Segment -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M15,50 V75 C15,80.52 19.48,85 25,85 H50" />
+
+    <!-- Bottom Right Corner Segment -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M50,85 H75 C80.52,85 85,80.52 85,75 V50" />
+
+    <!-- Top Right Corner Segment -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M85,50 V25 C85,19.48 80.52,15 75,15 H50" />
+
+    <!-- Center Circle -->
+    <path
+        android:fillColor="#FF8C00"
+        android:pathData="M50,50m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0" />
+    
+    <!-- Diagonal Growth Arrow -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M28,72 L50,50 L72,28 M60,28 H72 V40" />
+    
+    <!-- Bar Charts -->
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M30,35V42 M38,28V42 M46,35V42" />
+    <path 
+        android:strokeColor="#FF8C00"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M54,58V65 M62,58V72 M70,58V65" />
+</vector>

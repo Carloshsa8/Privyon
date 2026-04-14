@@ -1,0 +1,6 @@
+{
+  "appId": "com.alexandria.app",
+  "appName": "Alexandria",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}

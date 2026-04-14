@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">InvestHub</string>
+    <string name="title_activity_main">InvestHub</string>
+    <string name="package_name">com.investhub.app</string>
+    <string name="custom_url_scheme">com.investhub.app</string>
+</resources>

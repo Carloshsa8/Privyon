@@ -34,6 +34,29 @@ function createAppCard(folderName) {
   const encFolder = encodeURIComponent(folderName);
   const appFolderPath = path.join(appsDir, folderName);
   
+  // Auto-correção de caminhos absolutos (/assets/) em index.html compilados por Vite
+  const appIndexHtmlPath = path.join(appFolderPath, 'index.html');
+  if (fs.existsSync(appIndexHtmlPath)) {
+    try {
+      let indexHtmlContent = fs.readFileSync(appIndexHtmlPath, 'utf-8');
+      let changed = false;
+      if (indexHtmlContent.includes('src="/assets/')) {
+        indexHtmlContent = indexHtmlContent.replace(/src="\/assets\//g, 'src="./assets/');
+        changed = true;
+      }
+      if (indexHtmlContent.includes('href="/assets/')) {
+        indexHtmlContent = indexHtmlContent.replace(/href="\/assets\//g, 'href="./assets/');
+        changed = true;
+      }
+      if (changed) {
+        fs.writeFileSync(appIndexHtmlPath, indexHtmlContent, 'utf-8');
+        console.log(`- Corrigidos caminhos absolutos /assets/ em ${folderName}/index.html!`);
+      }
+    } catch (err) {
+      console.warn(`! Não foi possível corrigir caminhos em ${folderName}/index.html:`, err.message);
+    }
+  }
+  
   // Valores padrão (fallbacks)
   let title = folderName.replace(/-/g, ' ').replace(/_/g, ' ');
   title = title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

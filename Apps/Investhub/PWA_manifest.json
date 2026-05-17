@@ -1,0 +1,6 @@
+{
+  "name": "InvestHub",
+  "description": "Seu organizador pessoal de ativos financeiros",
+  "icon": "icon.png",
+  "tags": ["PWA", "React", "12x36"]
+}

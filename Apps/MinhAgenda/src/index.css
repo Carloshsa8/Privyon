@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=Titillium+Web:wght@200;300;400;600;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #fdf9f0;
+  --color-surface: #fdf9f0;
+  --color-border: #c7c7bf;
+  --color-text: #1c1c16;
+  --color-text-dim: #464742;
+  --color-accent: #5e5e5b;
+}
+
+.wheel-mask {
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+.giant-number-shadow {
+  text-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.paper-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  z-index: 100;
+  background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glass-pro {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.glass-input {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.text-gradient {
+  color: var(--color-text);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.font-display {
+  font-family: 'Fraunces', serif;
+}
+
+.font-body {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-titillium {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.font-aes-display {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.font-aes-body {
+  font-family: 'Outfit', sans-serif;
+}

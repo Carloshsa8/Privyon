@@ -126,12 +126,12 @@ const appCards = appFolders.map(folder => createAppCard(folder)).join('\n');
 // Ler o HTML da vitrine e atualizar a grid de aplicativos
 let htmlContent = fs.readFileSync(outputHtml, 'utf-8');
 
-const regex = /<div class="apps-grid">([\s\S]*?)<\/div>/;
+const regex = /<!-- grid-start -->([\s\S]*?)<!-- grid-end -->/;
 
 if (regex.test(htmlContent)) {
-  const newHtml = htmlContent.replace(regex, `<div class="apps-grid">\n${appCards}\n      </div>`);
+  const newHtml = htmlContent.replace(regex, `<!-- grid-start -->\n      <div class="apps-grid">\n${appCards}\n      </div>\n      <!-- grid-end -->`);
   fs.writeFileSync(outputHtml, newHtml, 'utf-8');
   console.log('✔ Apps/index.html foi atualizado com sucesso!');
 } else {
-  console.error('Não foi possível encontrar o bloco <div class="apps-grid"> no arquivo Apps/index.html!');
+  console.error('Não foi possível encontrar as tags de marcação <!-- grid-start --> e <!-- grid-end --> no arquivo Apps/index.html!');
 }

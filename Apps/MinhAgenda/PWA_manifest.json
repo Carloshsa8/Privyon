@@ -1,0 +1,6 @@
+{
+  "name": "MinhAgenda",
+  "description": "Seu controle de escala 12x36 premium com design minimalista.",
+  "icon": "icon.png",
+  "tags": ["PWA", "React", "12x36"]
+}

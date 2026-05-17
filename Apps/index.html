@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privyon — Vitrine de Aplicativos</title>
+  <meta name="description" content="Sua vitrine particular de aplicativos progressivos (PWA)." />
+  <link rel="icon" type="image/svg+xml" href="../logo.svg" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .apps-grid {
+      display: grid;
+      gap: 3rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      margin-top: 3rem;
+    }
+
+    .app-card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .app-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px hsla(var(--p-h), var(--p-s), var(--p-l), 0.15);
+      border-color: hsla(var(--p-h), var(--p-s), var(--p-l), 0.4);
+    }
+
+    .app-header-visual {
+      width: 100%;
+      height: 160px;
+      position: relative;
+      background: linear-gradient(135deg, hsl(220, 20%, 6%), hsl(220, 18%, 10%));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .app-header-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(hsla(var(--p-h), var(--p-s), var(--p-l), 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, hsla(var(--p-h), var(--p-s), var(--p-l), 0.02) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+    }
+
+    .app-icon-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 80px;
+      height: 80px;
+      border-radius: 1.25rem;
+      background: hsl(220, 20%, 4%);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .app-card:hover .app-icon-wrapper {
+      transform: scale(1.08);
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px hsla(var(--p-h), var(--p-s), var(--p-l), 0.2);
+    }
+
+    .app-icon {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      border-radius: 0.75rem;
+    }
+
+    .app-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .app-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--fg);
+    }
+
+    .app-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .app-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      background: hsl(220 20% 12%);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-visit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      background: hsla(var(--p-h), var(--p-s), var(--p-l), 0.1);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-visit:hover {
+      background: var(--primary);
+      color: var(--primary-fg);
+      box-shadow: 0 0 15px hsla(var(--p-h), var(--p-s), var(--p-l), 0.4);
+    }
+
+    .btn-visit svg {
+      width: 1rem;
+      height: 1rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.2s;
+    }
+
+    .btn-visit:hover svg {
+      transform: translateX(3px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav id="navbar">
+    <div class="inner">
+      <a href="../index.html#inicio" class="nav-logo">
+        <svg class="logo-icon" viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+        </svg>
+        <span class="logo-text">Priv<span>yon</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="../index.html#inicio">Início</a></li>
+        <li><a href="../index.html#solucoes" class="nav-link">Soluções</a></li>
+        <li><a href="../produtos.html" class="nav-link">Produtos</a></li>
+        <li><a href="../index.html#sobre" class="nav-link">Sobre</a></li>
+        <li><a href="../index.html#contato" class="nav-link">Contato</a></li>
+        <li><a href="javascript:void(0)" class="nav-link" id="manifesto-btn" onclick="window.openManifesto()">Manifesto</a></li>
+        <li><a href="javascript:void(0)" class="btn-cta" id="header-cta" onclick="window.openContactHub()">Comece Agora</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section id="portfolio-page" style="padding-top: 10rem; padding-bottom: 8rem; min-height: 100vh;">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">// Vitrine Secreta</span>
+        <h2 class="section-title">
+          Estúdio de <span class="text-gradient">Aplicativos</span>
+        </h2>
+        <p class="section-desc">
+          Seus aplicativos e utilitários progressivos (PWA) instaláveis e otimizados para qualquer tela.
+        </p>
+      </div>
+
+      <div class="apps-grid">
+
+        <!-- Aplicativo Auto-gerado: MinhAgenda -->
+        <div class="app-card reveal delay-1">
+          <div class="app-header-visual">
+            <div class="app-icon-wrapper">
+              <img class="app-icon" src="MinhAgenda/icon.png" alt="MinhAgenda Icon" onerror="this.src='../logo.svg'">
+            </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Seu controle de escala 12x36 premium com design minimalista.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">12x36</span>
+              </div>
+              <a href="MinhAgenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Aplicativo adicionado à pasta MinhAgenda.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">App</span>
+              </div>
+              <a href="MinhAgenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Aplicativo adicionado à pasta MinhAgenda.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">App</span>
+              </div>
+              <a href="MinhAgenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aplicativo Auto-gerado: minhagenda -->
+        <div class="app-card reveal delay-1">
+          <div class="app-header-visual">
+            <div class="app-icon-wrapper">
+              <img class="app-icon" src="minhagenda/icon.png" alt="MinhAgenda Icon" onerror="this.src='../logo.svg'">
+            </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Seu controle de escala 12x36 premium com design minimalista.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Mobile</span>
+              </div>
+              <a href="minhagenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Aplicativo adicionado à pasta MinhAgenda.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">App</span>
+              </div>
+              <a href="MinhAgenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aplicativo Auto-gerado: minhagenda -->
+        <div class="app-card reveal delay-1">
+          <div class="app-header-visual">
+            <div class="app-icon-wrapper">
+              <img class="app-icon" src="minhagenda/icon.png" alt="MinhAgenda Icon" onerror="this.src='../logo.svg'">
+            </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Seu controle de escala 12x36 premium com design minimalista.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Mobile</span>
+              </div>
+              <a href="minhagenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="app-content">
+            <div class="app-title-row">
+              <h3 class="app-title">MinhAgenda</h3>
+            </div>
+            <p class="app-desc">Seu controle de escala 12x36 premium com design minimalista.</p>
+            <div class="app-footer">
+              <div class="tech-stack">
+                <span class="tech-tag">PWA</span>
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Mobile</span>
+              </div>
+              <a href="minhagenda/index.html" target="_blank" class="btn-visit">
+                Acessar
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <a href="../index.html#inicio" class="footer-logo">
+          <svg viewBox="0 0 83.03 126.33" xmlns="http://www.w3.org/2000/svg">
+            <path d="m 41.512,0.261 a 41.253,41.629 0 0 0 -41.252,41.628 41.253,41.629 0 0 0 32.323,40.643 41.253,41.629 0 0 0 1.355,0.279 l 3.605,-15.214 a 25.783,26.018 0 0 1 -21.813,-25.707 25.783,26.018 0 0 1 25.782,-26.017 25.783,26.018 0 0 1 25.785,26.017 25.783,26.018 0 0 1 -22.433,25.798 l -8.7,15.48 -1.096,1.946 -1.634,2.91 -0.538,1.198 -0.254,0.56 0.25,31.085 a 5.157,5.204 0 0 0 5.158,5.203 5.157,5.204 0 0 0 5.154,-5.203 l 0.094,-9.977 10.985,-0.232 a 5.157,5.204 0 0 0 5.158,-5.203 5.157,5.204 0 0 0 -5.158,-5.206 5.157,5.204 0 0 0 -0.438,0.031 5.157,5.204 0 0 1 0.232,-0.026 l -10.682,0.213 0.157,-16.997 a 41.253,41.629 0 0 0 39.214,-41.578 41.253,41.629 0 0 0 -41.255,-41.628 z" />
+          </svg>
+          <span class="footer-logo-text">Priv<span>yon</span></span>
+        </a>
+        <div class="footer-copy" style="text-align: center;">
+          <p>© <span id="year"></span> Privyon. Todos os direitos reservados. Feito por Carlos.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  
+  <div id="mobile-menu">
+    <a href="../index.html#inicio" onclick="window.closeMobile()">Início</a>
+    <a href="../index.html#solucoes" onclick="window.closeMobile()">Soluções</a>
+    <a href="../produtos.html" onclick="window.closeMobile()">Produtos</a>
+    <a href="../index.html#sobre" onclick="window.closeMobile()">Sobre</a>
+    <a href="../index.html#contato" onclick="window.closeMobile()">Contato</a>
+    <a href="javascript:void(0)" id="mobile-manifesto-btn" onclick="window.openManifesto()">Manifesto</a>
+    <a href="javascript:void(0)" id="mobile-header-cta" onclick="window.openContactHub()" class="btn-cta">Comece Agora</a>
+  </div>
+</body>
+</html>

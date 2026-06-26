@@ -90,6 +90,7 @@
     </style>
 </head>
 <body class="bg-[#040814] text-slate-300 font-sans antialiased selection:bg-brand-orange selection:text-white">
+<script>const PWA_ENABLED=true;(function(){var p=new URLSearchParams(location.search),a=p.has('pwa')?p.get('pwa')==='on':PWA_ENABLED;if(!a){var s=document.createElement('style');s.textContent='.dt-layout{display:block!important}.mb-layout{display:none!important}';document.head.appendChild(s)}})()</script>
 
 <!-- ===== TOAST SHARED ===== -->
 <div id="toast-container" class="fixed bottom-28 md:bottom-6 left-4 z-50 flex flex-col gap-2 w-[calc(100%-32px)] md:w-80 pointer-events-none"></div>
@@ -97,7 +98,7 @@
 <!-- ================================================================ -->
 <!-- ===== DESKTOP: LANDING PAGE (≥768px) ===== -->
 <!-- ================================================================ -->
-<div class="hidden md:block min-h-screen overflow-x-hidden">
+<div class="dt-layout hidden md:block min-h-screen overflow-x-hidden">
     <header class="fixed top-0 inset-x-0 z-50 px-4 pt-4 pb-2 transition-all duration-300 bg-gradient-to-b from-[#040814] to-transparent">
         <div class="max-w-5xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl h-16 flex items-center justify-between px-4 md:px-6 shadow-2xl shadow-brand-orange/5">
             <div class="flex items-center gap-3">
@@ -295,7 +296,7 @@
 <!-- ================================================================ -->
 <!-- ===== MOBILE: APP SHELL (<768px) ===== -->
 <!-- ================================================================ -->
-<div class="md:hidden overflow-hidden">
+<div class="mb-layout md:hidden overflow-hidden">
 <div id="app" class="flex flex-col h-screen">
     <header class="flex items-center justify-between px-4 h-14 shrink-0 bg-[#040814]/95 backdrop-blur-xl border-b border-white/5 z-30">
         <div class="flex items-center gap-2.5">

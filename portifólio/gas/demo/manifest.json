@@ -2,7 +2,7 @@
   "name": "Vitão Gás e Água",
   "short_name": "VitãoGás",
   "description": "Peça gás e água com entrega inteligente em Mirassol",
-  "start_url": "./",
+  "start_url": "./app.html",
   "display": "standalone",
   "background_color": "#040814",
   "theme_color": "#F97316",

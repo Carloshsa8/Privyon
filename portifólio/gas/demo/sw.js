@@ -3,7 +3,7 @@ const url = self.location;
 
 const ASSETS = [
   './',
-  './index.html',
+  './app.html',
   './manifest.json',
   './icon.svg',
   'https://cdn.tailwindcss.com',

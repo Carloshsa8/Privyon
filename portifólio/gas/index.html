@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vitão Gás e Água | Entrega Inteligente Mirassol</title>
+    <meta name="description" content="Simule o tempo de entrega para o seu bairro e peça agora. O delivery mais rápido de Mirassol!">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            orangeHover: '#EA580C',
+                            blue: '#0EA5E9',
+                            slate: '#0B1120',
+                            surface: '#1E293B',
+                            glass: 'rgba(255, 255, 255, 0.03)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'spin-slow': 'spin 2s linear infinite',
+                        'toast-slide': 'toastSlide 5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        toastSlide: {
+                            '0%': { transform: 'translateX(-120%)', opacity: '0' },
+                            '10%': { transform: 'translateX(0)', opacity: '1' },
+                            '90%': { transform: 'translateX(0)', opacity: '1' },
+                            '100%': { transform: 'translateX(-120%)', opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: 50%;
+        }
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-bottom-color: #F97316;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#040814] text-slate-300 font-sans antialiased flex flex-col min-h-screen selection:bg-brand-orange selection:text-white pb-24 md:pb-0 relative overflow-x-hidden">
+
+    <header class="fixed top-0 inset-x-0 z-50 px-4 pt-4 pb-2 transition-all duration-300 bg-gradient-to-b from-[#040814] to-transparent">
+        <div class="max-w-5xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl h-16 flex items-center justify-between px-4 md:px-6 shadow-2xl">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-orange to-orange-600 flex items-center justify-center text-white shadow-lg shadow-brand-orange/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="font-bold text-sm md:text-base leading-none tracking-tight text-white">VITÃO<span class="text-brand-orange">GÁS</span></h1>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">App Delivery</span>
+                </div>
+            </div>
+            <div id="status-badge" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold backdrop-blur-sm">
+                <span id="status-dot" class="w-2 h-2 rounded-full relative"></span>
+                <span id="status-text" class="text-slate-200">...</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed bottom-28 md:bottom-6 left-4 z-50 flex flex-col gap-2 w-[calc(100%-32px)] md:w-80 pointer-events-none"></div>
+
+    <section class="relative pt-28 pb-20 px-5 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-40"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[500px] bg-brand-orange/15 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto relative z-10 w-full grid md:grid-cols-2 gap-12 items-center mt-8">
+            <div class="text-center md:text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-orange/10 border border-brand-orange/20 text-brand-orange text-xs md:text-sm font-semibold mb-6 backdrop-blur-md animate-fade-in-up">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-orange"></span>
+                    </span>
+                    Entregadores online agora
+                </div>
+                <h2 class="animate-fade-in-up text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 text-white leading-[1.1]" style="animation-delay: 100ms;">
+                    Gás e Água em <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-400">Tempo Recorde.</span>
+                </h2>
+                <p class="animate-fade-in-up text-slate-400 mb-8 text-lg font-medium max-w-md mx-auto md:mx-0 leading-relaxed" style="animation-delay: 200ms;">
+                    A Loja 2 do Vitão usa roteirização inteligente para chegar antes que sua comida esfrie. Aceitamos PIX na porta.
+                </p>
+                <div class="animate-fade-in-up flex items-center justify-center md:justify-start gap-6 text-sm text-slate-500 font-medium" style="animation-delay: 300ms;">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Instalação Grátis
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Teste de Vazamento
+                    </div>
+                </div>
+            </div>
+
+            <div class="animate-fade-in-up bg-brand-surface/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-1 shadow-2xl relative" style="animation-delay: 400ms;">
+                <div class="absolute -top-3 -right-3 bg-brand-blue text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg z-10 animate-bounce">Novo</div>
+                <div class="bg-[#0B1221] rounded-[22px] p-6 md:p-8 h-full border border-white/5 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 blur-3xl rounded-full"></div>
+                    <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Rastreador de Entrega
+                    </h3>
+                    <p class="text-sm text-slate-400 mb-6">Selecione seu bairro para ver o tempo exato de entrega da nossa base até você.</p>
+                    <div id="estimator-form">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Seu Bairro em Mirassol</label>
+                        <select id="bairro-select" class="w-full bg-slate-900 border border-slate-700 text-white text-base rounded-xl px-4 py-4 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-colors cursor-pointer mb-4">
+                            <option value="" disabled selected>Escolha o seu bairro...</option>
+                            <option value="Centro" data-time="08-12 min">Centro</option>
+                            <option value="Regissol" data-time="12-18 min">Regissol</option>
+                            <option value="Tarraf" data-time="10-15 min">Tarraf / Moreira</option>
+                            <option value="Aeroporto" data-time="15-20 min">Aeroporto</option>
+                            <option value="Cohab" data-time="10-16 min">Cohab / São José</option>
+                            <option value="Outro" data-time="15-25 min">Outros Bairros</option>
+                        </select>
+                        <button id="btn-calcular" onclick="calcularTempo()" class="w-full bg-white hover:bg-slate-200 text-slate-900 font-bold py-4 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Calcular Tempo
+                        </button>
+                    </div>
+                    <div id="estimator-loading" class="hidden py-8 flex-col items-center justify-center text-center">
+                        <div class="loader w-10 h-10 mb-4"></div>
+                        <p class="text-sm font-medium text-brand-orange animate-pulse">Buscando entregador mais próximo...</p>
+                    </div>
+                    <div id="estimator-result" class="hidden flex-col items-center text-center pt-2">
+                        <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 border border-green-500/20">
+                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <p class="text-slate-400 text-sm font-medium mb-1">Tempo estimado para <span id="result-bairro" class="text-white font-bold"></span>:</p>
+                        <p id="result-time" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 mb-6"></p>
+                        <button id="btn-pedido-bairro" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-brand-orange/20 active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            Fazer Pedido Prioritário
+                        </button>
+                        <button onclick="resetEstimator()" class="mt-4 text-sm text-slate-500 hover:text-white transition-colors underline">Consultar outro bairro</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-5 relative z-20 pb-20">
+        <div class="max-w-5xl mx-auto">
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-8">Nossos Produtos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-brand-surface/30 backdrop-blur-md border border-white/5 rounded-[32px] p-8 flex flex-col transition-all hover:bg-brand-surface/50 group cursor-pointer" onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Botijão de Gás P13.')">
+                    <div class="w-16 h-16 bg-gradient-to-br from-brand-orange to-amber-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-orange/20">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-2xl mb-2 text-white">Gás P13</h4>
+                    <p class="text-slate-400 text-sm mb-8 flex-grow">O botijão padrão para residências. Instalamos e testamos vazamentos gratuitamente para sua segurança.</p>
+                    <div class="flex items-center gap-2 text-brand-orange font-bold text-sm group-hover:translate-x-2 transition-transform">Fazer pedido <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
+                </div>
+                <div class="bg-brand-surface/30 backdrop-blur-md border border-white/5 rounded-[32px] p-8 flex flex-col transition-all hover:bg-brand-surface/50 group cursor-pointer" onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Galão de Água 20L.')">
+                    <div class="w-16 h-16 bg-gradient-to-br from-brand-blue to-cyan-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-brand-blue/20">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15a9 9 0 1018 0c0-5.5-9-13-9-13s-9 7.5-9 13z"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-2xl mb-2 text-white">Água 20L</h4>
+                    <p class="text-slate-400 text-sm mb-8 flex-grow">Galão retornável 20 litros. Água mineral leve, armazenada rigorosamente longe do sol.</p>
+                    <div class="flex items-center gap-2 text-brand-blue font-bold text-sm group-hover:translate-x-2 transition-transform">Fazer pedido <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-800 to-[#0B1221] border border-brand-orange/20 rounded-[32px] p-8 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/10 blur-3xl rounded-full"></div>
+                    <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-brand-orange mb-4 border border-white/10">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-xl mb-2 text-white">Clube Fidelidade</h4>
+                    <p class="text-slate-400 text-sm mb-6">Peça 10 botijões e o 11º sai totalmente por nossa conta.</p>
+                    <div class="mt-auto bg-[#040814]/50 rounded-2xl p-4 border border-white/5">
+                        <p class="text-xs text-slate-400 font-semibold uppercase mb-2">Como funciona</p>
+                        <p class="text-xs text-slate-500 leading-relaxed">Nosso sistema no WhatsApp controla tudo automaticamente pelo seu número. Sem papéis, sem complicação.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-brand-surface/20 border-t border-white/5">
+        <div class="max-w-5xl mx-auto px-5 grid md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Aceitamos na sua porta
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-teal-500/20 text-teal-400 rounded-xl flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></div>
+                        <span class="font-semibold text-slate-200">PIX</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg></div>
+                        <span class="font-semibold text-slate-200">Crédito</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg></div>
+                        <span class="font-semibold text-slate-200">Débito</span>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500/20 text-green-400 rounded-xl flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                        <span class="font-semibold text-slate-200">Dinheiro</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">Área de Cobertura</h3>
+                <p class="text-sm text-slate-400 mb-6 leading-relaxed">Nossa frota atende a cidade de Mirassol inteira com rotas otimizadas para chegar com a comida ainda no fogo.</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Centro</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Regissol</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Tarraf</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Moreira</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Aeroporto</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">São José</span>
+                    <span class="bg-[#040814] border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium">Cohab</span>
+                    <span class="bg-brand-orange/10 border border-brand-orange/30 text-brand-orange px-3 py-1.5 rounded-lg text-sm font-bold">e toda região...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#040814] border-t border-white/5 pt-12 pb-24 md:pb-12 text-center text-slate-500">
+        <div class="w-12 h-12 rounded-2xl bg-white/5 mx-auto flex items-center justify-center text-brand-orange mb-6 border border-white/10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+        </div>
+        <p class="font-bold text-slate-300 text-lg mb-1">Vitão Gás e Água - Loja 2</p>
+        <p class="text-sm mb-4">CNPJ: 00.000.000/0002-00</p>
+        <p class="text-xs">Segunda a Sábado: 08h às 20h • Domingos: 08h às 13h</p>
+    </footer>
+
+    <div id="sticky-cta" class="fixed bottom-0 left-0 w-full p-4 bg-[#040814]/80 backdrop-blur-xl border-t border-white/10 transform translate-y-full transition-transform duration-300 z-50 md:hidden">
+        <a href="javascript:void(0)" onclick="pedirWhatsApp('Olá! Gostaria de fazer um pedido na Loja 2.')" class="w-full bg-brand-orange text-white text-base font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-orange/20 active:scale-95 transition-transform">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Pedir no WhatsApp
+        </a>
+    </div>
+
+    <script>
+        const numeroWhatsapp = "5511999999999";
+        function pedirWhatsApp(mensagemOriginal) {
+            window.open(`https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagemOriginal)}`, '_blank');
+        }
+        function checkStatus() {
+            const now = new Date(), day = now.getDay(), hour = now.getHours();
+            let isOpen = false;
+            if (day >= 1 && day <= 6) { if (hour >= 8 && hour < 20) isOpen = true; }
+            else if (day === 0) { if (hour >= 8 && hour < 13) isOpen = true; }
+            const badge = document.getElementById('status-badge'), dot = document.getElementById('status-dot'), text = document.getElementById('status-text');
+            badge.classList.remove('hidden'); badge.classList.add('flex');
+            if (isOpen) {
+                dot.classList.add('bg-green-500');
+                text.innerText = 'Aberto agora';
+                text.classList.add('text-green-400');
+            } else {
+                dot.classList.add('bg-red-500');
+                text.innerText = 'Fechado';
+                text.classList.add('text-red-400');
+            }
+        }
+        checkStatus();
+        function calcularTempo() {
+            const select = document.getElementById('bairro-select');
+            const bairro = select.value;
+            const tempoStr = select.options[select.selectedIndex].getAttribute('data-time');
+            if(!bairro) return;
+            document.getElementById('estimator-form').classList.add('hidden');
+            document.getElementById('estimator-loading').classList.remove('hidden');
+            document.getElementById('estimator-loading').classList.add('flex');
+            setTimeout(() => {
+                document.getElementById('estimator-loading').classList.add('hidden');
+                document.getElementById('estimator-loading').classList.remove('flex');
+                document.getElementById('estimator-result').classList.remove('hidden');
+                document.getElementById('estimator-result').classList.add('flex');
+                document.getElementById('result-bairro').innerText = bairro;
+                document.getElementById('result-time').innerText = tempoStr;
+                document.getElementById('btn-pedido-bairro').onclick = () => {
+                    pedirWhatsApp(`Olá! Sou do bairro ${bairro} e vi que o tempo de entrega é ${tempoStr}. Gostaria de fazer um pedido!`);
+                };
+            }, 1200);
+        }
+        function resetEstimator() {
+            document.getElementById('estimator-result').classList.add('hidden');
+            document.getElementById('estimator-result').classList.remove('flex');
+            document.getElementById('estimator-form').classList.remove('hidden');
+            document.getElementById('bairro-select').value = "";
+        }
+        window.addEventListener('scroll', () => {
+            const el = document.getElementById('sticky-cta');
+            if (window.scrollY > 400) el.classList.remove('translate-y-full');
+            else el.classList.add('translate-y-full');
+        });
+        const fakeOrders = [
+            { name: "Carlos", product: "Gás P13", location: "Centro", time: "Agora mesmo" },
+            { name: "Mariana", product: "Água 20L", location: "Regissol", time: "Há 2 min" },
+            { name: "João", product: "Gás P13", location: "Tarraf", time: "Há 4 min" },
+            { name: "Fernanda", product: "2x Água 20L", location: "Aeroporto", time: "Há 5 min" }
+        ];
+        function createToast(order) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-3 flex items-center gap-3 shadow-2xl animate-toast-slide';
+            toast.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm text-slate-200 font-medium truncate">\${order.name} pediu <span class="text-brand-orange">\${order.product}</span></p>
+                    <p class="text-xs text-slate-400 truncate">Em \${order.location} • \${order.time}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+        setTimeout(() => {
+            let i = 0;
+            createToast(fakeOrders[i]);
+            setInterval(() => { i = (i + 1) % fakeOrders.length; createToast(fakeOrders[i]); }, 12000);
+        }, 3000);
+    </script>
+</body>
+</html>

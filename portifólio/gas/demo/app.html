@@ -23,10 +23,6 @@
                         'spin-slow': 'spin 2s linear infinite',
                         'toast-slide-down': 'toastSlideDown 5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'shimmer': 'shimmer 1.5s ease-in-out infinite',
-                        'slide-in-right': 'slideInRight 0.25s ease forwards',
-                        'slide-in-left': 'slideInLeft 0.25s ease forwards',
-                        'slide-out-right': 'slideOutRight 0.25s ease forwards',
-                        'slide-out-left': 'slideOutLeft 0.25s ease forwards',
                     },
                     keyframes: {
                         toastSlideDown: {
@@ -38,22 +34,6 @@
                         shimmer: {
                             '0%': { backgroundPosition: '200% 0' },
                             '100%': { backgroundPosition: '-200% 0' },
-                        },
-                        slideInRight: {
-                            from: { transform: 'translateX(60px)', opacity: '0' },
-                            to: { transform: 'translateX(0)', opacity: '1' },
-                        },
-                        slideInLeft: {
-                            from: { transform: 'translateX(-60px)', opacity: '0' },
-                            to: { transform: 'translateX(0)', opacity: '1' },
-                        },
-                        slideOutRight: {
-                            from: { transform: 'translateX(0)', opacity: '1' },
-                            to: { transform: 'translateX(60px)', opacity: '0' },
-                        },
-                        slideOutLeft: {
-                            from: { transform: 'translateX(0)', opacity: '1' },
-                            to: { transform: 'translateX(-60px)', opacity: '0' },
                         },
                     }
                 }
@@ -103,15 +83,7 @@
         }
         .nav-item svg { transition: color 0.2s; }
 
-        .view-transition {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            min-height: 100%;
-        }
-        main { position: relative; overflow: hidden; }
+
         header.has-scroll { box-shadow: 0 4px 24px rgba(249, 115, 22, 0.12); }
         .skeleton {
             background: linear-gradient(90deg, #1E293B 25%, #334155 50%, #1E293B 75%);
@@ -379,31 +351,14 @@ function switchView(name) {
     if (!current || !next || current === next) return;
 
     const views = ['home','order','loyalty','account'];
-    const curIdx = views.indexOf(current.dataset.view);
-    const nextIdx = views.indexOf(name);
-    const dir = nextIdx > curIdx ? 'right' : 'left';
-    const outAnim = dir === 'right' ? 'slide-out-left' : 'slide-out-right';
-    const inAnim = dir === 'right' ? 'slide-in-right' : 'slide-in-left';
+    const idx = views.indexOf(name);
 
     document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('text-brand-orange', 'nav-active'); n.classList.add('text-slate-500'); });
     const items = document.querySelectorAll('.nav-item');
-    if (items[nextIdx]) { items[nextIdx].classList.remove('text-slate-500'); items[nextIdx].classList.add('text-brand-orange', 'nav-active'); }
+    if (items[idx]) { items[idx].classList.remove('text-slate-500'); items[idx].classList.add('text-brand-orange', 'nav-active'); }
 
     current.classList.remove('active');
-    current.classList.add('view-transition', outAnim);
-    next.classList.add('view-transition', inAnim);
-
-    requestAnimationFrame(() => {
-        next.style.display = 'block';
-    });
-
-    setTimeout(() => {
-        current.classList.remove('view-transition', outAnim);
-        current.style.display = '';
-        next.classList.remove('view-transition', inAnim);
-        next.classList.add('active');
-        next.style.display = '';
-    }, 280);
+    next.classList.add('active');
 }
 
 function calcularTempo() {

@@ -206,7 +206,7 @@
       });
     }
     function go(i) { if(i>=0 && i<total) { current=i; update(); } }
-    function nextSlide() { if(current<total-1) { current++; update(); } }
+    function nextSlide() { if(current<total-1) { current++; update(); } else { window.location.href = 'gas-demo/index.html'; } }
     function prevSlide() { if(current>0) { current--; update(); } }
 
     document.addEventListener('keydown', e => {

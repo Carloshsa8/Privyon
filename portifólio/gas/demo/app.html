@@ -16,16 +16,17 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: { orange: '#F97316', orangeHover: '#EA580C', blue: '#0EA5E9', slate: '#0B1120', surface: '#1E293B', glass: 'rgba(255, 255, 255, 0.03)' }
+                        brand: { orange: '#F97316', orangeHover: '#EA580C', blue: '#0EA5E9', deep: '#0B1120', surface: '#1E293B' }
                     },
                     fontFamily: { sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'] },
                     animation: {
-                        'spin-slow': 'spin 2s linear infinite',
-                        'toast-slide-down': 'toastSlideDown 5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'toast-down': 'toastDown 5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'shimmer': 'shimmer 1.5s ease-in-out infinite',
+                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
                     },
                     keyframes: {
-                        toastSlideDown: {
+                        toastDown: {
                             '0%': { transform: 'translateY(-120%)', opacity: '0' },
                             '10%': { transform: 'translateY(0)', opacity: '1' },
                             '90%': { transform: 'translateY(0)', opacity: '1' },
@@ -35,186 +36,166 @@
                             '0%': { backgroundPosition: '200% 0' },
                             '100%': { backgroundPosition: '-200% 0' },
                         },
+                        pulseSoft: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(249,115,22,0.1)' },
+                            '100%': { boxShadow: '0 0 40px rgba(249,115,22,0.25)' },
+                        },
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        * { -webkit-tap-highlight-color: transparent; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .bg-grid-pattern {
-            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 32px 32px;
-        }
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-            background-repeat: no-repeat;
-            background-position-x: 95%;
-            background-position-y: 50%;
-        }
-        .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-bottom-color: #F97316;
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: spin 1s linear infinite;
-        }
         body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0.025;
+            content: ''; position: fixed; inset: 0; z-index: 9999;
+            pointer-events: none; opacity: 0.02;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
             mix-blend-mode: overlay;
         }
-        .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.2s ease forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        select {
+            -webkit-appearance: none; -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat; background-position-x: 95%; background-position-y: 50%;
         }
+        .view { display: none; }
+        .view.active { display: block; animation: viewIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes viewIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .nav-indicator {
+            width: 1.25rem; height: 0.125rem;
+            background: #F97316; border-radius: 999px;
+            opacity: 0; transform: scaleX(0);
+            transition: opacity 0.3s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .nav-active .nav-indicator { opacity: 1; transform: scaleX(1); }
         .nav-item svg { transition: color 0.2s; }
-
-
-        header.has-scroll { box-shadow: 0 4px 24px rgba(249, 115, 22, 0.12); }
+        header.has-scroll { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
         .skeleton {
             background: linear-gradient(90deg, #1E293B 25%, #334155 50%, #1E293B 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s ease-in-out infinite;
             border-radius: 0.75rem;
         }
-        .btn-ripple {
-            position: relative;
-            overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-ripple::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.2) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .btn-ripple:active::after {
-            opacity: 1;
-            transition: 0s;
-        }
+        .btn-press { transition: transform 0.15s, box-shadow 0.15s; }
+        .btn-press:active { transform: scale(0.96); }
         .pb-safe { padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)); }
         .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
-        .h-safe { height: calc(1rem + env(safe-area-inset-bottom, 0px)); }
-        .nav-indicator {
-            width: 1.25rem;
-            height: 0.125rem;
-            background: #F97316;
-            border-radius: 999px;
-            opacity: 0;
-            transition: opacity 0.25s, transform 0.25s;
-        }
-        .nav-active .nav-indicator { opacity: 1; }
-        .overscroll-behavior-none { overscroll-behavior: none; }
+        .overscroll-none { overscroll-behavior: none; }
+        .text-glow { text-shadow: 0 0 40px rgba(249,115,22,0.3); }
+        .progress-glow { box-shadow: 0 0 12px rgba(249,115,22,0.3); }
+        .card-glow-orange { box-shadow: 0 8px 32px rgba(249,115,22,0.08); }
+        .card-glow-blue { box-shadow: 0 8px 32px rgba(14,165,233,0.08); }
     </style>
 </head>
-<body class="bg-[#040814] text-slate-300 font-sans antialiased selection:bg-brand-orange selection:text-white">
+<body class="bg-[#030712] text-slate-300 font-sans antialiased">
 
-<div id="toast-container" class="fixed top-16 left-4 z-50 flex flex-col gap-2 w-[calc(100%-32px)] pointer-events-none"></div>
+<div id="toast-container" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-[90vw] max-w-sm pointer-events-none"></div>
 
 <div id="app" class="flex flex-col h-screen">
-    <header id="main-header" class="flex items-center justify-between px-4 h-14 shrink-0 bg-[#040814]/95 backdrop-blur-xl border-b border-white/5 z-30 transition-shadow duration-300">
+    <header id="main-header" class="flex items-center justify-between px-4 h-14 shrink-0 bg-[#030712]/90 backdrop-blur-2xl border-b border-white/[0.04] z-30 transition-shadow duration-300">
         <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-orange to-orange-600 flex items-center justify-center text-white shadow-lg shadow-brand-orange/20">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-orange via-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-brand-orange/30">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
             </div>
             <div>
-                <h1 class="font-bold text-sm leading-none tracking-tight text-white">VITÃO<span class="text-brand-orange">GÁS</span></h1>
-                <span class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">App Delivery</span>
+                <h1 class="font-extrabold text-sm leading-none tracking-tight text-white/90">VITÃO<span class="text-brand-orange">GÁS</span></h1>
+                <span class="text-[8px] font-semibold text-slate-600 uppercase tracking-[0.15em]">App Delivery</span>
             </div>
         </div>
-        <div id="status-badge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-semibold">
+        <div id="status-badge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-[10px] font-semibold backdrop-blur-md">
             <span id="status-dot" class="w-1.5 h-1.5 rounded-full relative"></span>
-            <span id="status-text" class="text-slate-200">...</span>
+            <span id="status-text" class="text-slate-300">...</span>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto hide-scrollbar relative overscroll-behavior-none" style="-webkit-overflow-scrolling: touch">
+    <main class="flex-1 overflow-y-auto hide-scrollbar overscroll-none" style="-webkit-overflow-scrolling: touch">
         <!-- HOME -->
         <section data-view="home" class="view active">
-            <div class="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
-            <div class="absolute top-0 left-1/4 w-full max-w-[500px] h-[300px] bg-brand-orange/10 blur-[100px] rounded-full pointer-events-none"></div>
-            <div class="p-4 space-y-5 relative">
-                <div>
-                    <h2 class="text-3xl font-extrabold text-white leading-tight">
+            <div class="p-5 pb-8 space-y-6">
+                <div class="pt-1">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-orange/[0.08] border border-brand-orange/20 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-[10px] font-semibold text-brand-orange tracking-wide">Entregadores online</span>
+                    </div>
+                    <h2 class="text-[2rem] md:text-4xl font-black text-white leading-[1.1] tracking-tight">
                         Gás e Água em<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-400">Tempo Recorde.</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-amber-400 to-yellow-300 text-glow">Tempo Recorde.</span>
                     </h2>
-                    <p class="text-slate-400 text-sm mt-1.5">Peça agora e receba antes do gás acabar. Aceitamos PIX na porta.</p>
+                    <p class="text-sm text-slate-500 mt-2 max-w-xs leading-relaxed">Peça agora e receba antes do gás acabar. Aceitamos PIX na porta.</p>
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-brand-surface/30 backdrop-blur-md border border-white/5 rounded-2xl p-5 flex flex-col transition-all hover:bg-brand-surface/50">
+                    <div class="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 flex flex-col card-glow-orange">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="w-11 h-11 bg-gradient-to-br from-brand-orange to-amber-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-orange/20 shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-orange to-amber-500 flex items-center justify-center text-white shadow-lg shadow-brand-orange/20 shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-base text-white">Gás P13</h4>
-                                <p class="text-xs text-slate-400">a partir de <span class="text-brand-orange font-bold">R$ 115</span></p>
+                                <h4 class="font-bold text-sm text-white">Gás P13</h4>
+                                <p class="text-[11px] text-slate-500">a partir de <span class="text-brand-orange font-bold text-sm">R$115</span></p>
                             </div>
                         </div>
-                        <p class="text-xs text-slate-500 mb-3">Instalação e teste de vazamento grátis</p>
-                        <button onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Botijão de Gás P13.')" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold text-xs py-2.5 rounded-xl transition-all active:scale-[0.97] btn-ripple flex items-center justify-center gap-1.5 shadow-lg shadow-brand-orange/20">
+                        <p class="text-[10px] text-slate-600 mb-3 leading-relaxed">Instalação + teste de vazamento grátis</p>
+                        <button onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Botijão de Gás P13.')" class="w-full bg-gradient-to-r from-brand-orange to-amber-500 text-white font-bold text-[11px] py-2.5 rounded-xl btn-press flex items-center justify-center gap-1.5 shadow-lg shadow-brand-orange/20">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            Pedir via WhatsApp →
+                            Pedir
                         </button>
                     </div>
-                    <div class="bg-brand-surface/30 backdrop-blur-md border border-white/5 rounded-2xl p-5 flex flex-col transition-all hover:bg-brand-surface/50">
+                    <div class="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 flex flex-col card-glow-blue">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="w-11 h-11 bg-gradient-to-br from-brand-blue to-cyan-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-blue/20 shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15a9 9 0 1018 0c0-5.5-9-13-9-13s-9 7.5-9 13z"></path></svg>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-blue to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-brand-blue/20 shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 15a9 9 0 1018 0c0-5.5-9-13-9-13s-9 7.5-9 13z"/></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-base text-white">Água 20L</h4>
-                                <p class="text-xs text-slate-400">a partir de <span class="text-brand-blue font-bold">R$ 18</span></p>
+                                <h4 class="font-bold text-sm text-white">Água 20L</h4>
+                                <p class="text-[11px] text-slate-500">a partir de <span class="text-brand-blue font-bold text-sm">R$18</span></p>
                             </div>
                         </div>
-                        <p class="text-xs text-slate-500 mb-3">Galão retornável, água mineral leve</p>
-                        <button onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Galão de Água 20L.')" class="w-full bg-brand-blue hover:bg-sky-600 text-white font-bold text-xs py-2.5 rounded-xl transition-all active:scale-[0.97] btn-ripple flex items-center justify-center gap-1.5 shadow-lg shadow-brand-blue/20">
+                        <p class="text-[10px] text-slate-600 mb-3 leading-relaxed">Galão retornável, água mineral leve</p>
+                        <button onclick="pedirWhatsApp('Olá! Gostaria de pedir 1 Galão de Água 20L.')" class="w-full bg-gradient-to-r from-brand-blue to-cyan-400 text-white font-bold text-[11px] py-2.5 rounded-xl btn-press flex items-center justify-center gap-1.5 shadow-lg shadow-brand-blue/20">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            Pedir via WhatsApp →
+                            Pedir
                         </button>
                     </div>
                 </div>
-                <div class="flex items-center gap-3 text-xs text-slate-500">
-                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> PIX</span>
-                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg> Crédito/Débito</span>
-                    <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Dinheiro</span>
+
+                <div class="flex items-center gap-4 text-[11px] text-slate-600">
+                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-green-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> PIX</span>
+                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-blue-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Crédito</span>
+                    <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Dinheiro</span>
                 </div>
             </div>
         </section>
 
         <!-- PEDIR -->
-        <section data-view="order" class="view p-4 space-y-5">
-            <div class="bg-brand-surface/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-1 shadow-2xl shadow-brand-blue/10 relative">
-                <div class="absolute -top-3 -right-3 bg-brand-blue text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg z-10 animate-bounce">Novo</div>
-                <div class="bg-[#0B1221] rounded-[22px] p-5 border border-white/5 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 blur-3xl rounded-full"></div>
-                    <h3 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Rastreador de Entrega
-                    </h3>
-                    <p class="text-xs text-slate-400 mb-4">Selecione seu bairro para ver o tempo exato de entrega.</p>
+        <section data-view="order" class="view p-5">
+            <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06] rounded-3xl overflow-hidden card-glow-blue">
+                <div class="px-5 pt-5 pb-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-blue to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-brand-blue/20">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Rastreador de Entrega</h3>
+                            <p class="text-[11px] text-slate-500">Tempo real da nossa base até você</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-5 pb-5 pt-4">
                     <div id="estimator-form">
-                        <label class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Seu Bairro em Mirassol</label>
-                        <select id="bairro-select" class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all cursor-pointer mb-3 hover:border-brand-orange/50 hover:shadow-sm hover:shadow-brand-orange/10">
-                            <option value="" disabled selected>Escolha o seu bairro...</option>
+                        <label class="block text-[10px] font-semibold text-slate-600 uppercase tracking-[0.1em] mb-2">Seu bairro em Mirassol</label>
+                        <select id="bairro-select" class="w-full bg-white/[0.04] border border-white/[0.08] text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-brand-orange/50 focus:ring-1 focus:ring-brand-orange/20 transition-all cursor-pointer mb-3">
+                            <option value="" disabled selected>Escolha o bairro...</option>
                             <option value="Centro" data-time="08-12 min">Centro</option>
                             <option value="Regissol" data-time="12-18 min">Regissol</option>
                             <option value="Tarraf" data-time="10-15 min">Tarraf / Moreira</option>
@@ -222,8 +203,8 @@
                             <option value="Cohab" data-time="10-16 min">Cohab / São José</option>
                             <option value="Outro" data-time="15-25 min">Outros Bairros</option>
                         </select>
-                        <button id="btn-calcular" onclick="calcularTempo()" class="w-full bg-white hover:bg-slate-200 text-slate-900 font-bold py-3.5 rounded-xl transition-all active:scale-95 hover:shadow-xl hover:shadow-brand-orange/30 flex items-center justify-center gap-2 text-sm">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <button id="btn-calcular" onclick="calcularTempo()" class="w-full bg-gradient-to-r from-brand-orange to-amber-500 hover:brightness-110 text-white font-bold py-3.5 rounded-xl btn-press flex items-center justify-center gap-2 text-sm shadow-lg shadow-brand-orange/20">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Calcular Tempo
                         </button>
                     </div>
@@ -231,110 +212,116 @@
                         <div class="skeleton w-full h-12"></div>
                         <div class="skeleton w-full h-12"></div>
                         <div class="flex items-center gap-2 mt-1">
-                            <div class="loader w-5 h-5"></div>
-                            <p class="text-xs font-medium text-brand-orange animate-pulse">Buscando entregador mais próximo...</p>
+                            <div class="w-4 h-4 rounded-full border-2 border-white/10 border-t-brand-orange animate-spin"></div>
+                            <p class="text-xs font-medium text-brand-orange animate-pulse">Localizando entregador...</p>
                         </div>
                     </div>
-                    <div id="estimator-result" class="hidden flex-col items-center text-center pt-1">
-                        <div class="w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center mb-3 border border-green-500/20">
-                            <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div id="estimator-result" class="hidden flex-col items-center text-center pt-2">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-400/20 to-emerald-500/20 flex items-center justify-center mb-3 border border-green-400/20">
+                            <svg class="w-8 h-8 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
                         </div>
-                        <p class="text-xs text-slate-400 font-medium mb-0.5">Tempo estimado para <span id="result-bairro" class="text-white font-bold"></span>:</p>
-                        <p id="result-time" class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 mb-4"></p>
-                        <button id="btn-pedido-bairro" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-orange/20 active:scale-95 flex items-center justify-center gap-2 text-sm">
+                        <p class="text-xs text-slate-500 mb-0.5">Tempo estimado para <span id="result-bairro" class="text-white font-semibold"></span></p>
+                        <p id="result-time" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500 mb-5"></p>
+                        <button id="btn-pedido-bairro" class="w-full bg-gradient-to-r from-brand-orange to-amber-500 text-white font-bold py-3.5 rounded-xl btn-press flex items-center justify-center gap-2 text-sm shadow-lg shadow-brand-orange/20">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            Fazer Pedido Prioritário
+                            Pedir Agora
                         </button>
-                        <button onclick="resetEstimator()" class="mt-3 text-xs text-slate-500 hover:text-white transition-colors underline">Consultar outro bairro</button>
+                        <button onclick="resetEstimator()" class="mt-3 text-xs text-slate-600 hover:text-slate-400 transition-colors underline underline-offset-2">Consultar outro bairro</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- FIDELIDADE -->
-        <section data-view="loyalty" class="view p-4">
-            <div class="bg-gradient-to-br from-slate-800 to-[#0B1221] border border-brand-orange/20 rounded-[32px] p-6 flex flex-col relative shadow-lg shadow-brand-orange/10">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/10 blur-3xl rounded-full"></div>
-                <div class="absolute -top-2 -right-2 bg-brand-orange text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg z-10">11º GRÁTIS</div>
-                <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-brand-orange mb-4 border border-white/10">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+        <section data-view="loyalty" class="view p-5">
+            <div class="bg-gradient-to-br from-white/[0.04] to-transparent border border-brand-orange/20 rounded-3xl p-6 relative overflow-hidden card-glow-orange">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-orange/10 blur-3xl rounded-full"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-amber-500/5 blur-3xl rounded-full"></div>
+                <div class="absolute -top-2 -right-2 bg-gradient-to-r from-brand-orange to-amber-500 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg shadow-brand-orange/30 z-10">11º GRÁTIS</div>
+
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-orange to-amber-500 flex items-center justify-center text-white shadow-lg shadow-brand-orange/20 mb-4">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
                 </div>
-                <h4 class="font-bold text-xl mb-2 text-white">Clube Fidelidade</h4>
-                <p class="text-slate-400 text-sm mb-6">Peça 10 vezes e a 11ª sai de graça. O botijão fica por nossa conta.</p>
-                <div class="bg-[#040814]/50 rounded-2xl p-4 border border-white/5 space-y-3">
+                <h4 class="font-bold text-xl text-white mb-1">Clube Fidelidade</h4>
+                <p class="text-sm text-slate-400 mb-5">Peça 10 vezes e a 11ª sai de graça. O botijão fica por nossa conta.</p>
+
+                <div class="bg-black/30 rounded-2xl p-4 border border-white/[0.04] space-y-3 backdrop-blur-md">
                     <div>
-                        <div class="flex items-center justify-between text-xs mb-1.5">
-                            <span class="text-slate-400 font-semibold uppercase">Seu progresso</span>
-                            <span class="text-brand-orange font-bold">7/10 <span class="text-xs text-slate-500">pedidos</span></span>
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="text-slate-500 font-semibold uppercase tracking-[0.08em]">Progresso</span>
+                            <span class="text-brand-orange font-black">7<sub class="text-slate-500 font-normal text-[10px]">/10</sub></span>
                         </div>
-                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                            <div class="h-full w-[70%] bg-gradient-to-r from-brand-orange to-amber-400 rounded-full transition-all duration-1000"></div>
+                        <div class="w-full bg-white/[0.04] rounded-full h-2 overflow-hidden">
+                            <div class="h-full w-[70%] bg-gradient-to-r from-brand-orange via-amber-400 to-yellow-300 rounded-full progress-glow"></div>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">Peça 10 vezes e a 11ª sai de graça. Nosso sistema no WhatsApp controla tudo pelo seu número.</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Nosso sistema no WhatsApp controla tudo pelo seu número. Sem papel, sem complicação.</p>
                 </div>
-                <button onclick="pedirWhatsApp('Olá! Quero saber mais sobre o Clube Fidelidade.')" class="mt-4 w-full bg-brand-orange/10 hover:bg-brand-orange/20 text-brand-orange font-bold text-sm py-3 rounded-xl border border-brand-orange/20 transition-all active:scale-95">
+
+                <button onclick="pedirWhatsApp('Olá! Quero saber mais sobre o Clube Fidelidade.')" class="mt-4 w-full bg-white/[0.04] hover:bg-white/[0.08] text-brand-orange font-bold text-sm py-3 rounded-xl border border-white/[0.08] btn-press transition-colors">
                     Quero participar →
                 </button>
             </div>
         </section>
 
         <!-- CONTA -->
-        <section data-view="account" class="view p-4 space-y-5">
-            <div class="text-center">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-orange to-orange-600 mx-auto flex items-center justify-center text-white shadow-lg shadow-brand-orange/20 mb-3">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
+        <section data-view="account" class="view p-5">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-orange to-amber-500 mx-auto flex items-center justify-center text-white shadow-xl shadow-brand-orange/20 mb-4">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
                 </div>
                 <h3 class="font-bold text-lg text-white">Vitão Gás e Água</h3>
-                <p class="text-sm text-slate-400">Loja 2</p>
-                <p class="text-xs text-slate-500 mt-1">CNPJ: 00.000.000/0002-00</p>
+                <p class="text-sm text-slate-500">Loja 2</p>
+                <p class="text-xs text-slate-600 mt-0.5">CNPJ: 00.000.000/0002-00</p>
             </div>
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-brand-orange/10 rounded-xl flex items-center justify-center text-brand-orange shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/[0.06] rounded-2xl divide-y divide-white/[0.04] mb-5">
+                <div class="flex items-center gap-3 p-4">
+                    <div class="w-9 h-9 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange shrink-0">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 font-medium">Horário de Funcionamento</p>
+                        <p class="text-[11px] text-slate-600 font-medium">Horário de Funcionamento</p>
                         <p class="text-sm text-slate-200 font-medium">Seg-Sáb: 08h às 20h • Dom: 08h às 13h</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-brand-blue/10 rounded-xl flex items-center justify-center text-brand-blue shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <div class="flex items-center gap-3 p-4">
+                    <div class="w-9 h-9 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue shrink-0">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 font-medium">Área de Cobertura</p>
+                        <p class="text-[11px] text-slate-600 font-medium">Área de Cobertura</p>
                         <p class="text-sm text-slate-200 font-medium">Mirassol inteira</p>
                     </div>
                 </div>
             </div>
-            <button onclick="pedirWhatsApp('Olá! Vim pelo App Delivery.')" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-orange/20 active:scale-95 flex items-center justify-center gap-2 text-sm">
+
+            <button onclick="pedirWhatsApp('Olá! Vim pelo App Delivery.')" class="w-full bg-gradient-to-r from-brand-orange to-amber-500 text-white font-bold py-3.5 rounded-xl btn-press flex items-center justify-center gap-2 text-sm shadow-lg shadow-brand-orange/20">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Falar no WhatsApp
             </button>
-            <p class="text-center text-[10px] text-slate-600">App Delivery • Vitão Gás e Água © 2026</p>
+            <p class="text-center text-[10px] text-slate-700 mt-6 tracking-wide">Vitão Gás e Água © 2026</p>
         </section>
     </main>
 
-    <nav class="flex items-center justify-around h-16 shrink-0 bg-[#040814]/95 backdrop-blur-xl border-t border-white/10 z-40 pb-safe">
+    <nav class="flex items-center justify-around h-16 shrink-0 bg-[#030712]/90 backdrop-blur-2xl border-t border-white/[0.04] z-40 pb-safe">
         <button onclick="switchView('home')" class="nav-item nav-active flex flex-col items-center justify-center gap-0.5 text-brand-orange transition-colors relative flex-1 py-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
             <span class="text-[10px] font-semibold">Início</span>
             <div class="nav-indicator absolute -top-0.5"></div>
         </button>
-        <button onclick="switchView('order')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-500 transition-colors relative flex-1 py-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <button onclick="switchView('order')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-600 transition-colors relative flex-1 py-1">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             <span class="text-[10px] font-semibold">Pedir</span>
             <div class="nav-indicator absolute -top-0.5"></div>
         </button>
-        <button onclick="switchView('loyalty')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-500 transition-colors relative flex-1 py-1">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+        <button onclick="switchView('loyalty')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-600 transition-colors relative flex-1 py-1">
+            <svg class="w-6 h-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
             <span class="text-[10px] font-semibold">Fidelidade</span>
             <div class="nav-indicator absolute -top-0.5"></div>
         </button>
-        <button onclick="switchView('account')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-500 transition-colors relative flex-1 py-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <button onclick="switchView('account')" class="nav-item flex flex-col items-center justify-center gap-0.5 text-slate-600 transition-colors relative flex-1 py-1">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             <span class="text-[10px] font-semibold">Conta</span>
             <div class="nav-indicator absolute -top-0.5"></div>
         </button>
@@ -353,9 +340,9 @@ function switchView(name) {
     const views = ['home','order','loyalty','account'];
     const idx = views.indexOf(name);
 
-    document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('text-brand-orange', 'nav-active'); n.classList.add('text-slate-500'); });
+    document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('text-brand-orange', 'nav-active'); n.classList.add('text-slate-600'); });
     const items = document.querySelectorAll('.nav-item');
-    if (items[idx]) { items[idx].classList.remove('text-slate-500'); items[idx].classList.add('text-brand-orange', 'nav-active'); }
+    if (items[idx]) { items[idx].classList.remove('text-slate-600'); items[idx].classList.add('text-brand-orange', 'nav-active'); }
 
     current.classList.remove('active');
     next.classList.add('active');
@@ -411,14 +398,14 @@ const fakeOrders = [
 function createToast(order) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    toast.className = 'bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-3 flex items-center gap-3 shadow-2xl animate-toast-slide-down';
+    toast.className = 'bg-white/[0.06] backdrop-blur-2xl border border-white/[0.08] rounded-2xl p-3 flex items-center gap-3 shadow-2xl animate-toast-down';
     toast.innerHTML = `
-        <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 shrink-0 border border-green-500/10">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
         </div>
         <div class="flex-1 min-w-0">
             <p class="text-sm text-slate-200 font-medium truncate">${order.name} pediu <span class="text-brand-orange">${order.product}</span></p>
-            <p class="text-xs text-slate-400 truncate">Em ${order.location} • ${order.time}</p>
+            <p class="text-xs text-slate-500 truncate">${order.location} • ${order.time}</p>
         </div>`;
     container.appendChild(toast);
     setTimeout(() => toast.remove(), 5000);
@@ -429,7 +416,6 @@ setTimeout(() => {
     setInterval(() => { i = (i + 1) % fakeOrders.length; createToast(fakeOrders[i]); }, 12000);
 }, 3000);
 
-// Header shadow on scroll
 const mainEl = document.querySelector('main');
 const headerEl = document.getElementById('main-header');
 if (mainEl && headerEl) {
@@ -437,17 +423,6 @@ if (mainEl && headerEl) {
         headerEl.classList.toggle('has-scroll', mainEl.scrollTop > 0);
     });
 }
-
-// Ripple effect: track click coordinates on btn-ripple elements
-document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.btn-ripple');
-    if (!btn) return;
-    const rect = btn.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(0);
-    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(0);
-    btn.style.setProperty('--x', x + '%');
-    btn.style.setProperty('--y', y + '%');
-});
 
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>

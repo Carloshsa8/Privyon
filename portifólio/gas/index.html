@@ -163,7 +163,7 @@
         <p class="text-slate-400 text-base md:text-lg mb-6 md:mb-8 max-w-lg mx-auto">
           Esse site aí embaixo é seu. Clica, navega, manda zap. Tudo funcionando de verdade.
         </p>
-        <a href="gas-demo/index.html" target="_blank" class="inline-flex items-center gap-3 bg-white hover:bg-slate-200 text-slate-900 font-bold text-base md:text-lg py-3 md:py-4 px-6 md:px-8 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-2xl">
+        <a href="demo/index.html" target="_blank" class="inline-flex items-center gap-3 bg-white hover:bg-slate-200 text-slate-900 font-bold text-base md:text-lg py-3 md:py-4 px-6 md:px-8 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-2xl">
           <span>👁️</span>
           Ver o site rodando
           <span>→</span>
@@ -206,7 +206,7 @@
       });
     }
     function go(i) { if(i>=0 && i<total) { current=i; update(); } }
-    function nextSlide() { if(current<total-1) { current++; update(); } else { window.location.href = 'gas-demo/index.html'; } }
+    function nextSlide() { if(current<total-1) { current++; update(); } }
     function prevSlide() { if(current>0) { current--; update(); } }
 
     document.addEventListener('keydown', e => {
